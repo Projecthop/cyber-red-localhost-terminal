@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colet Control Center</title>
+<style>
+  body { background:#111; color:#e8e8e8; font-family: ui-monospace, Menlo, Consolas, monospace; margin:16px; }
+  h1 { font-size:18px; margin:0 0 8px; }
+  .row { margin:6px 0; }
+  #brokerState, #phoneState { white-space:pre-wrap; }
+  #feed { background:#000; border:1px solid #444; padding:10px; min-height:220px; white-space:pre-wrap; font-size:14px; }
+  #log { background:#181818; border:1px solid #333; padding:8px; height:140px; overflow:auto; white-space:pre-wrap; font-size:12px; }
+  button { background:#222; color:#e8e8e8; border:1px solid #555; padding:6px 10px; margin:2px; cursor:pointer; }
+  button:hover { background:#333; }
+  input { background:#000; color:#e8e8e8; border:1px solid #555; padding:6px; margin:2px; }
+  .ok { color:#7ee787; } .bad { color:#ff7b72; } .dim { color:#999; }
+</style>
+</head>
+<body>
+<h1>Colet Control Center</h1>
+<div class="row" id="brokerState">BROKER: starting…</div>
+<div class="row" id="phoneState">PHONE: unknown</div>
+<div class="row">
+  <button data-cmd="ping">Ping</button>
+  <button data-cmd="foreground">Foreground app</button>
+  <button data-cmd="uitree">UI tree now</button>
+  <button data-key="back">Back</button>
+  <button data-key="home">Home</button>
+  <button data-key="recents">Recents</button>
+  <button data-key="notifications">Notifications</button>
+  <button data-cmd="wake">Wake 10m</button>
+  <button data-cmd="lock">Lock</button>
+</div>
+<div class="row">
+  <input id="tapTextQuery" placeholder="button text to tap" size="24">
+  <button id="tapTextBtn">Tap by text</button>
+  <input id="typeText" placeholder="text to type" size="24">
+  <button id="typeBtn">Type</button>
+</div>
+<div class="row">
+  <input id="termuxCmd" placeholder="Termux command" size="40">
+  <button id="termuxBtn">Run in Termux</button>
+</div>
+<div class="row dim">SCREEN FEED (raw data — the phone's screen as words):</div>
+<div id="feed">(waiting for the phone's first snapshot…)</div>
+<div class="row dim">LOG:</div>
+<div id="log"></div>
+
+<script src="mqtt.min.js"></script>
+<script>
+(function () {
+  var deviceId = (location.hash || "").replace(/^#/, "").trim();
+  var base = "colet-control/" + deviceId;
+  var BROKERS = [
+    "wss://broker.emqx.io:8084/mqtt",
+    "wss://broker.hivemq.com:8884/mqtt",
+    "wss://mqtt.eclipseprojects.io:443/mqtt"
+  ];
+  var client = null;
+  var pending = {};   // cmdId -> {resolve, timer}
+  var lastStatus = null;
+  var lastUi = null;
+
+  var elBroker = document.getElementById("brokerState");
+  var elPhone = document.getElementById("phoneState");
+  var elFeed = document.getElementById("feed");
+  var elLog = document.getElementById("log");
+
+  function log(msg) {
+    var line = "[" + new Date().toLocaleTimeString() + "] " + msg;
+    elLog.textContent += (elLog.textContent ? "\n" : "") + line;
+    elLog.scrollTop = elLog.scrollHeight;
+  }
+  function brokerState(txt, ok) {
+    elBroker.textContent = "BROKER: " + txt;
+    elBroker.className = "row " + (ok === true ? "ok" : ok === false ? "bad" : "");
+  }
+  function phoneState() {
+    if (!lastStatus) { elPhone.textContent = "PHONE: not seen yet"; return; }
+    var age = Math.max(0, Math.round((Date.now() - lastStatus.ts) / 1000));
+    elPhone.textContent = "PHONE: seen — app v" + (lastStatus.control_version || "?") +
+      ", foreground: " + (lastStatus.package || "?") +
+      ", accessibility: " + (lastStatus.a11y ? "ON" : "off") +
+      ", feed: " + (lastStatus.feed || "?") +
+      ", heartbeat " + age + "s old";
+  }
+  function renderFeed() {
+    if (!lastUi) return;
+    var age = Math.max(0, Math.round((Date.now() - lastUi.ts) / 1000));
+    var head = "APP: " + (lastUi.package || "?") + "  (snapshot " + age + "s old)\n\n";
+    elFeed.textContent = head + (lastUi.text || "(no text in snapshot)");
+  }
+  setInterval(function () { phoneState(); renderFeed(); }, 2000);
+
+  if (!deviceId) {
+    brokerState("no device id in the URL fragment (#<id>)", false);
+    return;
+  }
+
+  function onMessage(topic, payload) {
+    var txt = payload.toString();
+    if (topic === base + "/status") {
+      try { lastStatus = JSON.parse(txt); phoneState(); } catch (e) {}
+      return;
+    }
+    if (topic === base + "/ui") {
+      try { lastUi = JSON.parse(txt); renderFeed(); } catch (e) {}
+      return;
+    }
+    if (topic.indexOf(base + "/results/") === 0) {
+      var id = topic.substring((base + "/results/").length);
+      var slot = pending[id];
+      if (slot) {
+        clearTimeout(slot.timer);
+        delete pending[id];
+        try { slot.resolve(JSON.parse(txt)); } catch (e) { slot.resolve({ ok: false, error: "bad result json" }); }
+      }
+    }
+  }
+
+  function tryBroker(url) {
+    return new Promise(function (resolve) {
+      log("trying " + url);
+      var c = mqtt.connect(url, {
+        clientId: "colet-web-" + Math.random().toString(16).slice(2, 10),
+        connectTimeout: 9000,
+        reconnectPeriod: 0,
+        clean: true
+      });
+      var settled = false;
+      var huntTimer = null;
+      function done(found) {
+        if (settled) return;
+        settled = true;
+        if (huntTimer) clearTimeout(huntTimer);
+        resolve(found ? c : null);
+        if (!found) { try { c.end(true); } catch (e) {} }
+      }
+      c.on("connect", function () {
+        log("connected to " + url + " — listening for the phone (retained status)…");
+        c.subscribe(base + "/status", { qos: 0 });
+        c.subscribe(base + "/ui", { qos: 1 });
+        c.subscribe(base + "/results/+", { qos: 1 });
+        huntTimer = setTimeout(function () {
+          if (lastStatus || lastUi) { done(true); } else { log("phone not on " + url); done(false); }
+        }, 9000);
+      });
+      c.on("message", function (topic, payload) {
+        onMessage(topic, payload);
+        if ((topic === base + "/status" || topic === base + "/ui") && !settled) {
+          log("phone found on " + url);
+          done(true);
+        }
+      });
+      c.on("error", function (err) { log("error on " + url + ": " + (err && err.message)); done(false); });
+      c.on("close", function () { if (!settled) { log("closed: " + url); done(false); } });
+      setTimeout(function () { done(false); }, 14000);
+    });
+  }
+
+  function send(type, params) {
+    return new Promise(function (resolve) {
+      if (!client) { resolve({ ok: false, error: "not connected" }); return; }
+      var id = Math.random().toString(16).slice(2, 14);
+      var timer = setTimeout(function () {
+        delete pending[id];
+        resolve({ ok: false, error: "timeout waiting for phone" });
+      }, 25000);
+      pending[id] = { resolve: resolve, timer: timer };
+      client.publish(base + "/commands",
+        JSON.stringify({ id: id, type: type, params: params || {} }), { qos: 1 });
+    });
+  }
+
+  function wireButtons() {
+    document.querySelectorAll("[data-cmd]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var type = b.getAttribute("data-cmd");
+        var params = type === "wake" ? { minutes: 10 } : {};
+        log("-> " + type);
+        send(type, params).then(function (r) {
+          log("<- " + type + ": " + JSON.stringify(r).slice(0, 500));
+          if (type === "uitree" && r && r.ok && r.data && r.data.tree) {
+            lastUi = { ts: Date.now(), package: lastStatus ? lastStatus.package : "?",
+              text: r.data.tree.map(function (n) {
+                var label = n.t || n.d; if (!label) return null;
+                var s = "- " + label;
+                if (n.c && n.b) s += "  [tap @" + Math.round((n.b[0] + n.b[2]) / 2) + "," + Math.round((n.b[1] + n.b[3]) / 2) + "]";
+                return s;
+              }).filter(Boolean).join("\n") };
+            renderFeed();
+          }
+        });
+      });
+    });
+    document.querySelectorAll("[data-key]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var name = b.getAttribute("data-key");
+        log("-> key " + name);
+        send("key", { name: name }).then(function (r) { log("<- key " + name + ": " + JSON.stringify(r).slice(0, 300)); });
+      });
+    });
+    document.getElementById("tapTextBtn").addEventListener("click", function () {
+      var q = document.getElementById("tapTextQuery").value;
+      if (!q) return;
+      log("-> taptext " + q);
+      send("taptext", { query: q }).then(function (r) { log("<- taptext: " + JSON.stringify(r).slice(0, 300)); });
+    });
+    document.getElementById("typeBtn").addEventListener("click", function () {
+      var t = document.getElementById("typeText").value;
+      if (!t) return;
+      log("-> type");
+      send("type", { text: t }).then(function (r) { log("<- type: " + JSON.stringify(r).slice(0, 300)); });
+    });
+    document.getElementById("termuxBtn").addEventListener("click", function () {
+      var cmd = document.getElementById("termuxCmd").value;
+      if (!cmd) return;
+      log("-> termux: " + cmd);
+      send("termux", { command: cmd, background: true, timeout: 30 }).then(function (r) {
+        log("<- termux: " + JSON.stringify(r).slice(0, 800));
+      });
+    });
+  }
+
+  (async function hunt() {
+    brokerState("hunting…");
+    for (var i = 0; i < BROKERS.length; i++) {
+      var c = await tryBroker(BROKERS[i]);
+      if (c) {
+        client = c;
+        brokerState("connected — " + BROKERS[i], true);
+        log("CONTROL LINK LIVE via " + BROKERS[i]);
+        wireButtons();
+        return;
+      }
+    }
+    brokerState("could not reach the phone on any broker from this browser", false);
+    log("hunt failed on all brokers");
+  })();
+})();
+</script>
+</body>
+</html>
