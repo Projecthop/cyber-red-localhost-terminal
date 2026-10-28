@@ -361,7 +361,7 @@
       .split-preview { background: var(--panel-2); border: 1.5px dashed var(--line); border-radius: 11px; padding: 10px 13px; font-size: 14.5px; margin-bottom: 12px; }
       .room-side { display: flex; flex-direction: column; gap: 14px; }
 
-      /* ---------- coin bank ---------- */
+      /* ---------- cash bank ---------- */
       .bank-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
       .pack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
       .pack { background: var(--panel); border: 2px solid var(--line); border-radius: 16px; padding: 18px; text-align: center; box-shadow: var(--shadow); }
@@ -737,6 +737,10 @@
       @media (max-width:620px){
         .hero-overlay{ inset:auto 10px 10px 10px; padding:16px; }
       }
+
+      /* cash, not coins: the money badge is a green dollar bill, not a gold coin */
+      .coin-dot{ border-radius:7px; background:linear-gradient(180deg,#8ae35e,#2f8f14); border:2px solid #1d5c08; color:#fff; }
+      .fly-coin{ border-radius:6px; background:linear-gradient(180deg,#8ae35e,#2f8f14); border:2px solid #1d5c08; }
     </style>
   </head>
   <body class="gated">
@@ -749,11 +753,11 @@
         <div style="margin-top:10px;"><span class="tagline-ribbon"><span class="game-lettering">Be Controlled 4 Cash</span></span></div>
         <p class="nojoke">No joke. Your real life self gets controlled for cash.</p>
         <div class="age-badge">18+ ONLY</div>
-        <p><b>Pay people to do what you want.</b> Real people sign up. You pay coins, you pick a move, they do it live on camera. Done = they get paid. Skipped = you get your coins back. Adults only.</p>
+        <p><b>Pay people to do what you want.</b> Real people sign up. You pay cash, you pick a move, they do it live on camera. Done = they get paid. Skipped = you get your cash back. Adults only.</p>
         <ul class="gate-rules">
           <li>Every Sim shows ID to prove she is 18+ before her first stream. Tapping below is your word that you are 18+ too.</li>
           <li>No paying anyone to hurt a person. Ever. Nothing illegal either.</li>
-          <li>She writes her own do / won't-do list. Her list wins over your coins, every time.</li>
+          <li>She writes her own do / won't-do list. Her list wins over your cash, every time.</li>
         </ul>
         <div class="load-wrap" aria-hidden="true">
           <div class="load-label"><span>Loading Tulsa Lot…</span><span>Almost ready</span></div>
@@ -762,7 +766,7 @@
         </div>
         <button class="press-start" id="pressStart" type="button">▶ Press Start — I'm 18+</button>
         <button class="gate-under" id="gateUnder" type="button">I'm under 18</button>
-        <p class="gate-fine" id="gateMsg">Coins here are free test coins and the rooms are demos. The rules above are the real rules.</p>
+        <p class="gate-fine" id="gateMsg">The cash here is free test cash and the rooms are demos. The rules above are the real rules.</p>
       </div>
     </div>
 
@@ -775,16 +779,16 @@
         </a>
         <div class="topbar-spacer"></div>
         <span class="held-pill" id="heldPill" hidden>Held: <b id="heldAmt">0</b></span>
-        <div class="coin-pill" title="Your coin balance">
-          <span class="coin-dot">S</span>
-          <span id="coinAmt">500</span>
-          <span style="color:var(--ink-soft);font-size:13px;">coins</span>
+        <div class="coin-pill" title="Your cash balance">
+          <span class="coin-dot">$</span>
+          <span id="coinAmt">$500</span>
+          <span style="color:var(--ink-soft);font-size:13px;">cash</span>
         </div>
         <button class="signin-btn" id="signinBtn" type="button">Sign in</button>
       </div>
       <nav class="mainnav" aria-label="Main">
         <button class="nav-btn active" data-nav="lobby" type="button"><span class="dot" style="background:var(--a-green)"></span>Lobby</button>
-        <button class="nav-btn" data-nav="bank" type="button"><span class="dot" style="background:var(--y-yellow)"></span>Coin Bank</button>
+        <button class="nav-btn" data-nav="bank" type="button"><span class="dot" style="background:var(--y-yellow)"></span>Cash Bank</button>
         <button class="nav-btn" data-nav="join" type="button"><span class="dot" style="background:var(--x-blue)"></span>Become a Sim</button>
         <button class="nav-btn" data-nav="rules" type="button"><span class="dot" style="background:var(--b-red)"></span>Rules</button>
       </nav>
@@ -800,7 +804,7 @@
             <span class="tagline-ribbon" style="margin-bottom:14px;"><span class="game-lettering">Be Controlled 4 Cash</span></span>
             <p class="nojoke">No joke. Your real life self gets controlled for cash.</p>
             <h1>Pay people to do what <em>you</em> want.</h1>
-            <p>Real women in Tulsa go live on camera. You pay coins and pick a move. Your coins wait safe until she does it. Done — she gets paid. Skipped — you get every coin back. Like The Sims, except the Sims are real people and they keep the cash.</p>
+            <p>Real women in Tulsa go live on camera. You pay cash and pick a move. Your cash waits safe until she does it. Done — she gets paid. Skipped — you get every dollar back. Like The Sims, except the Sims are real people and they keep the cash.</p>
             <div class="hero-cta">
               <button class="btn btn-a" data-goto-live type="button">Enter a live room</button>
               <button class="btn btn-ghost" data-nav="join" type="button" style="background:rgba(9,17,38,.88);color:#fff;border-color:#fff;">Become a Sim</button>
@@ -847,8 +851,8 @@
           <p>Pay people to do what you want — 4 easy steps.</p>
         </div>
         <div class="how-grid">
-          <div class="how-cell"><span class="abtn X">X</span><h3>Pick a move</h3><p>Pick a move from her list, or write your own. Set your coins. Your coins wait safe — held, not spent.</p></div>
-          <div class="how-cell"><span class="abtn A">A</span><h3>She says yes or no</h3><p>She has 3 minutes to say yes or skip it. Skip = every coin comes right back to you. No charge.</p></div>
+          <div class="how-cell"><span class="abtn X">X</span><h3>Pick a move</h3><p>Pick a move from her list, or write your own. Set your cash. Your cash waits safe — held, not spent.</p></div>
+          <div class="how-cell"><span class="abtn A">A</span><h3>She says yes or no</h3><p>She has 3 minutes to say yes or skip it. Skip = every dollar comes right back to you. No charge.</p></div>
           <div class="how-cell"><span class="abtn B" style="background:var(--ink);color:var(--bg)">▶</span><h3>She does it live</h3><p>She has up to 20 minutes to do the move, live on camera, in front of the whole room.</p></div>
           <div class="how-cell"><span class="abtn Y">Y</span><h3>You tap Done</h3><p>Tap Done within 15 minutes. She gets 95%, the house keeps 5%. Say nothing for 15 minutes and she still gets paid — unless you ask for a check first.</p></div>
         </div>
@@ -867,35 +871,35 @@
         <div id="roomMount"></div>
       </section>
 
-      <!-- ================= COIN BANK ================= -->
+      <!-- ================= CASH BANK ================= -->
       <section class="view" id="view-bank">
         <div class="section-head" style="margin-top:6px;">
-          <h2>Coin Bank</h2>
-          <p>1 coin = 10 cents. These are free test coins — no real money moves here.</p>
+          <h2>Cash Bank</h2>
+          <p>This is free test cash — no real money moves here.</p>
         </div>
         <div class="bank-grid">
-          <div class="stat-cell"><b id="bankAvail">500</b><span>AVAILABLE COINS</span></div>
+          <div class="stat-cell"><b id="bankAvail">$500</b><span>AVAILABLE CASH</span></div>
           <div class="stat-cell"><b id="bankHeld">0</b><span>HELD FOR MOVES</span></div>
-          <div class="stat-cell"><b id="bankSpent">0</b><span>COINS SPENT SO FAR</span></div>
+          <div class="stat-cell"><b id="bankSpent">0</b><span>CASH SPENT SO FAR</span></div>
           <div class="stat-cell"><b id="bankCombos">0</b><span>YOUR MOVES DONE</span></div>
         </div>
 
-        <div class="section-head"><h2 class="game-lettering pay-lettering" style="color:var(--sims-blue-ink);">Pay People To Do What You Want</h2><p>Coins are how you pay. Tap a pack to load free test coins right now.</p></div>
+        <div class="section-head"><h2 class="game-lettering pay-lettering" style="color:var(--sims-blue-ink);">Pay People To Do What You Want</h2><p>Cash is how you pay. Tap a pack to load free test cash right now.</p></div>
         <div class="pack-grid">
-          <div class="pack"><span class="coin-dot">S</span><div class="p-coins">100</div><div class="p-price">coins · $10.00</div><button class="btn btn-y" data-pack="100" type="button" style="width:100%;justify-content:center;">Get free test coins</button></div>
-          <div class="pack"><span class="coin-dot">S</span><div class="p-coins">550</div><div class="p-price">coins · $50.00</div><button class="btn btn-y" data-pack="550" type="button" style="width:100%;justify-content:center;">Get free test coins</button></div>
-          <div class="pack"><span class="tag">BEST VALUE</span><div class="p-coins">1,200</div><div class="p-price">coins · $100.00</div><button class="btn btn-y" data-pack="1200" type="button" style="width:100%;justify-content:center;">Get free test coins</button></div>
-          <div class="pack"><span class="coin-dot">S</span><div class="p-coins">2,600</div><div class="p-price">coins · $200.00</div><button class="btn btn-y" data-pack="2600" type="button" style="width:100%;justify-content:center;">Get free test coins</button></div>
+          <div class="pack"><span class="coin-dot">$</span><div class="p-coins">$10</div><div class="p-price">test cash pack</div><button class="btn btn-y" data-pack="10" type="button" style="width:100%;justify-content:center;">Get free test cash</button></div>
+          <div class="pack"><span class="coin-dot">$</span><div class="p-coins">$50</div><div class="p-price">test cash pack</div><button class="btn btn-y" data-pack="50" type="button" style="width:100%;justify-content:center;">Get free test cash</button></div>
+          <div class="pack"><span class="tag">BEST VALUE</span><div class="p-coins">$100</div><div class="p-price">test cash pack</div><button class="btn btn-y" data-pack="100" type="button" style="width:100%;justify-content:center;">Get free test cash</button></div>
+          <div class="pack"><span class="coin-dot">$</span><div class="p-coins">$200</div><div class="p-price">test cash pack</div><button class="btn btn-y" data-pack="200" type="button" style="width:100%;justify-content:center;">Get free test cash</button></div>
         </div>
 
         <div class="section-head"><h2>How the money splits</h2></div>
         <div class="versus" style="margin-top:0;">
-          <p style="margin:0 0 10px;">When a move is done and you tap Done, the held coins split right away. Say nothing and don't ask for a check, and they split when your 15 minutes run out:</p>
+          <p style="margin:0 0 10px;">When a move is done and you tap Done, the held cash splits right away. Say nothing and don't ask for a check, and they split when your 15 minutes run out:</p>
           <div class="versus-bar" aria-hidden="true"><div class="vt" style="width:95%"></div><div class="vw"></div></div>
-          <p><b>95% to the Sim</b> · <b>5% to the house</b>. A 150-coin move pays her 142 and the house keeps 8. If she skips a move, or the rules block it, nobody gets paid — you get all of it back.</p>
+          <p><b>95% to the Sim</b> · <b>5% to the house</b>. A $150 move pays her $142 and the house keeps $8. If she skips a move, or the rules block it, nobody gets paid — you get all of it back.</p>
         </div>
 
-        <div class="section-head"><h2>Your money trail</h2><p>Every coin, accounted for.</p></div>
+        <div class="section-head"><h2>Your money trail</h2><p>Every dollar, accounted for.</p></div>
         <div class="ledger" id="ledger"></div>
       </section>
 
@@ -930,9 +934,9 @@
           </div>
           <div class="form-grid">
             <div class="field"><label for="jMove1">Signature move</label><input id="jMove1" placeholder="e.g. Victory dance" /></div>
-            <div class="field"><label for="jPrice1">Its price (coins)</label><input id="jPrice1" type="number" min="10" max="5000" step="5" value="50" /></div>
+            <div class="field"><label for="jPrice1">Its price (cash $)</label><input id="jPrice1" type="number" min="10" max="5000" step="5" value="50" /></div>
           </div>
-          <p class="hint" style="margin-bottom:12px;font-size:14.5px;"><b>Your pay:</b> when someone pays for one of your moves, you keep 95% of the coins. The house keeps 5%. That's it — no other cuts.</p>
+          <p class="hint" style="margin-bottom:12px;font-size:14.5px;"><b>Your pay:</b> when someone pays for one of your moves, you keep 95% of the cash. The house keeps 5%. That's it — no other cuts.</p>
           <button class="btn btn-a" type="submit" style="width:100%;justify-content:center;font-size:17px;">Create my player card</button>
           <p class="hint" style="margin-top:12px;font-size:13.5px;color:var(--ink-soft);">Demo signup: your card shows in the Lobby right away. For real streams, you need an ID check and a way to get paid first.</p>
         </form>
@@ -952,11 +956,11 @@
               <li><span class="no" style="color:var(--b-red);font-weight:700;">✕</span>No request may pay anyone to hurt a person — no hits, no dares that injure, no "pranks" on strangers.</li>
               <li><span style="color:var(--b-red);font-weight:700;">✕</span>Nothing illegal. If it's a crime off camera, it's banned on camera.</li>
               <li><span style="color:var(--b-red);font-weight:700;">✕</span>No minors — not as Sims, not as players, not in the room.</li>
-              <li><span style="color:var(--b-red);font-weight:700;">✕</span>No meeting up. Coins buy camera time and camera moves only — never a person, never a place.</li>
+              <li><span style="color:var(--b-red);font-weight:700;">✕</span>No meeting up. Cash buys camera time and camera moves only — never a person, never a place.</li>
               <li><span style="color:var(--b-red);font-weight:700;">✕</span>No personal info: no real names, addresses, phone numbers, or schools in a request.</li>
               <li><span style="color:var(--b-red);font-weight:700;">✕</span>No weapons, no drugs, no threats, no blackmail.</li>
             </ul>
-            <p>Every request you write gets checked against this list before any coin moves. A blocked request costs nothing.</p>
+            <p>Every request you write gets checked against this list before any cash moves. A blocked request costs nothing.</p>
           </div>
           <div class="rule-card">
             <h3><span class="abtn A">✓</span>Always allowed</h3>
@@ -964,29 +968,29 @@
               <li><span style="color:var(--a-green-dark);font-weight:700;">✓</span>Anything on the Sim's own menu — she wrote it, she priced it.</li>
               <li><span style="color:var(--a-green-dark);font-weight:700;">✓</span>Your own requests, if they fit her will-do list: dances, songs, study sessions, cooking, shoutouts, games, dares that stay safe and legal.</li>
               <li><span style="color:var(--a-green-dark);font-weight:700;">✓</span>Adult moves between checked 18+ adults, on camera, only if her list allows them.</li>
-              <li><span style="color:var(--a-green-dark);font-weight:700;">✓</span>Her will-NOT list outranks your coins. A skip is instant, final, and fully refunded.</li>
+              <li><span style="color:var(--a-green-dark);font-weight:700;">✓</span>Her will-NOT list outranks your cash. A skip is instant, final, and fully refunded.</li>
             </ul>
             <p>Every Sim's card carries her own limits in writing. The menu is the contract.</p>
           </div>
           <div class="rule-card">
             <h3><span class="abtn X">≡</span>A move, step by step</h3>
             <ol class="steps-list">
-              <li>You pick or write a move and set the coins.</li>
+              <li>You pick or write a move and set the cash.</li>
               <li>The rules check it. Not allowed = blocked, and it costs nothing.</li>
-              <li>Your coins are held safe — not spent yet.</li>
+              <li>Your cash is held safe — not spent yet.</li>
               <li>She has 3 minutes to say yes or skip it.</li>
-              <li>Skip = all your coins back, right away.</li>
+              <li>Skip = all your cash back, right away.</li>
               <li>Yes = she has 20 minutes to do it, live on camera.</li>
               <li>When she is done, you tap Done within 15 minutes.</li>
               <li>No tap and no complaint in 15 minutes = she still gets paid.</li>
-              <li>The held coins split: 95% to her, 5% to the house.</li>
-              <li>Every coin is written down in your Coin Bank list.</li>
+              <li>The held cash splits: 95% to her, 5% to the house.</li>
+              <li>Every dollar is written down in your Cash Bank list.</li>
             </ol>
           </div>
           <div class="rule-card">
             <h3><span class="abtn Y">§</span>Problems &amp; your account</h3>
-            <p><b>If something goes wrong.</b> Ask for a check within your 15 minutes and the coins stay held — nobody gets paid while the house watches the room recording. If the tape shows she didn't do it, you get all your coins back. Fake complaints lower your level.</p>
-            <p><b>Getting paid.</b> Sims turn coins into cash at 10 cents each. No extra fees — the house already took its 5% at the split. First payout waits for the ID check.</p>
+            <p><b>If something goes wrong.</b> Ask for a check within your 15 minutes and the cash stays held — nobody gets paid while the house watches the room recording. If the tape shows she didn't do it, you get all your cash back. Fake complaints lower your level.</p>
+            <p><b>Getting paid.</b> Sims keep the cash they earn. No extra fees — the house already took its 5% at the split. First payout waits for the ID check.</p>
             <p><b>Never locked out.</b> You sign in with your username + password. Forgot it? Your recovery email helps you make a new one. Your phone number is never the key — lose the number, you still get in.</p>
             <p><b>The front door.</b> The Telegram channel and the @Controlwhobot bot are for news and sign-up only. The game lives here, behind the 18+ gate.</p>
           </div>
@@ -1147,12 +1151,12 @@
         renderLedger();
       }
       function renderWallet() {
-        $("coinAmt").textContent = fmt(state.balance);
-        $("heldAmt").textContent = fmt(state.held);
+        $("coinAmt").textContent = "$" + fmt(state.balance);
+        $("heldAmt").textContent = "$" + fmt(state.held);
         $("heldPill").hidden = state.held <= 0;
-        $("bankAvail").textContent = fmt(state.balance);
-        $("bankHeld").textContent = fmt(state.held);
-        $("bankSpent").textContent = fmt(state.spent);
+        $("bankAvail").textContent = "$" + fmt(state.balance);
+        $("bankHeld").textContent = "$" + fmt(state.held);
+        $("bankSpent").textContent = "$" + fmt(state.spent);
         $("bankCombos").textContent = fmt(state.combos);
         $("statPresses").textContent = fmt(state.pressesToday);
         $("statCombos").textContent = fmt(state.combosToday);
@@ -1165,11 +1169,11 @@
         for (var i = state.ledger.length - 1; i >= 0; i--) {
           var e = state.ledger[i];
           var amtTxt, cls;
-          if (e.amt > 0) { amtTxt = "+" + fmt(e.amt); cls = "pos"; }
-          else if (e.amt < 0) { amtTxt = "−" + fmt(-e.amt); cls = "neg"; }
+          if (e.amt > 0) { amtTxt = "+$" + fmt(e.amt); cls = "pos"; }
+          else if (e.amt < 0) { amtTxt = "−$" + fmt(-e.amt); cls = "neg"; }
           else { amtTxt = "split"; cls = ""; }
           html += '<div class="ledger-row"><span class="l-time">' + e.time + '</span><span>' + esc(e.label) + '</span>' +
-            '<span class="l-amt ' + cls + '">' + amtTxt + '</span><span class="l-bal">bal ' + fmt(e.bal) + '</span></div>';
+            '<span class="l-amt ' + cls + '">' + amtTxt + '</span><span class="l-bal">bal $' + fmt(e.bal) + '</span></div>';
         }
         el.innerHTML = html;
       }
@@ -1216,7 +1220,7 @@
             (s.live ? '<span class="watchers">👁 ' + fmt(s.watchers) + '</span>' : '') +
             '</div><div class="sim-body">' +
             '<div class="sim-name-row"><h3>' + esc(s.name) + '</h3><span class="handle">' + esc(s.handle) + '</span><span class="lvl">LVL ' + s.lvl + '</span></div>' +
-            '<div><span class="chip">📍 ' + esc(s.hood) + ', Tulsa</span> <span class="chip">★ ' + s.rating + '</span> <span class="chip">Moves from ' + Math.min.apply(null, s.moves.map(function (m) { return m.price; })) + ' coins</span></div>' +
+            '<div><span class="chip">📍 ' + esc(s.hood) + ', Tulsa</span> <span class="chip">★ ' + s.rating + '</span> <span class="chip">Moves from $' + Math.min.apply(null, s.moves.map(function (m) { return m.price; })) + '</span></div>' +
             needsHTML(s) +
             '<div class="sim-actions">' +
             (s.live ? '<button class="btn btn-a" data-watch="' + s.id + '" type="button">▶ Watch live — pay for a move</button>' : '<button class="btn btn-ghost" type="button" disabled>Offline — back soon</button>') +
@@ -1243,7 +1247,7 @@
         var moves = "";
         s.moves.forEach(function (m, i) {
           moves += '<div class="move-row"><span class="abtn ' + m.btn + '">' + m.btn + '</span><span class="m-name">' + esc(m.name) + '</span>' +
-            '<span class="m-price">' + m.price + ' coins</span>' +
+            '<span class="m-price">' + '$' + m.price + '</span>' +
             (s.live ? '<button class="btn btn-a" data-press-move="' + s.id + ':' + i + '" type="button">Send this one</button>' : '') + '</div>';
         });
         var will = s.willDo.map(function (w) { return '<li><span class="yes">✓</span><span>' + esc(w) + '</span></li>'; }).join("");
@@ -1255,7 +1259,7 @@
           '<div style="margin-top:6px;"><span class="handle" style="color:var(--ink-soft);font-weight:600;">' + esc(s.handle) + '</span> · <span class="chip">📍 ' + esc(s.hood) + ', Tulsa</span></div>' +
           '<p class="bio">' + esc(s.bio) + '</p>' +
           '<div style="margin-top:14px;">' + needsHTML(s) + '<p style="margin-top:8px;font-size:13px;color:var(--ink-soft);font-weight:600;">XP to LVL ' + (s.lvl + 1) + ': ' + s.xp + '% · Green bars, happy Sim. Red bars, arms waving.</p></div>' +
-          '<div class="pcard-stats"><div><b>' + s.fans + '</b><span>FANS</span></div><div><b>' + fmt(s.combosDone) + '</b><span>MOVES DONE</span></div><div><b>★ ' + s.rating + '</b><span>RATING</span></div><div><b>' + fmt(s.earned) + '</b><span>COINS EARNED HERE</span></div></div>' +
+          '<div class="pcard-stats"><div><b>' + s.fans + '</b><span>FANS</span></div><div><b>' + fmt(s.combosDone) + '</b><span>MOVES DONE</span></div><div><b>★ ' + s.rating + '</b><span>RATING</span></div><div><b>' + '$' + fmt(s.earned) + '</b><span>CASH EARNED HERE</span></div></div>' +
           (s.live ? '<button class="btn btn-a" data-enter-room="' + s.id + '" type="button" style="margin-top:18px;">▶ Go to her live room — pay for a move</button>' : '<p style="margin-top:18px;color:var(--ink-soft);font-weight:600;">Her room opens when she is live — ' + esc(s.backAt || "soon") + '.</p>') +
           '</div></div>' +
           '<div class="pcard-cols"><section><h3>Move menu — she wrote it, she priced it</h3>' + moves + '</section>' +
@@ -1269,7 +1273,7 @@
       var CHAT_LINES = [
         "that last move was CLEAN", "tulsa holding the line tonight", "someone pay for the study sprint, I dare you",
         "the world side is quiet… too quiet", "XP bar is almost there, one more press", "this room > every other app on my phone",
-        "coins wait safe till she does it, no funny business", "LETS GOOO", "visiting from texas, tulsa is winning me over",
+        "cash waits safe till she does it, no funny business", "LETS GOOO", "visiting from texas, tulsa is winning me over",
         "she never skips a fair move, respect", "another move incoming, watch", "918 represent!!", "sul sul tulsa!!", "her fun bar was RED a minute ago, we saved her", "this is just the sims but the sims get paid lol"
       ];
       var SIM_REPLIES = ["sul sul! got it, watch this 👀", "dag dag — easy. next?", "you controllers spoil me", "TULSA ENERGY ONLY", "yibs! okay that one was fun, not gonna lie", "vadish! *waves arms happily*"];
@@ -1306,7 +1310,7 @@
         room.sim = s; room.selMove = (typeof preselect === "number") ? preselect : 0; room.selAmt = s.moves[room.selMove].price;
         var chips = "";
         s.moves.forEach(function (m, i) {
-          chips += '<button type="button" class="move-chip' + (i === room.selMove ? " sel" : "") + '" data-chip="' + i + '"><span class="abtn ' + m.btn + '" style="width:24px;height:24px;font-size:12px;">' + m.btn + '</span>' + esc(m.name) + ' · ' + m.price + '</button>';
+          chips += '<button type="button" class="move-chip' + (i === room.selMove ? " sel" : "") + '" data-chip="' + i + '"><span class="abtn ' + m.btn + '" style="width:24px;height:24px;font-size:12px;">' + m.btn + '</span>' + esc(m.name) + ' · $' + m.price + '</button>';
         });
         $("roomMount").innerHTML =
           '<div class="room-grid"><div>' +
@@ -1322,20 +1326,20 @@
           '<div class="move-chips" id="moveChips">' + chips + '</div>' +
           '<div class="field"><label for="customPress">…or write your own request</label>' +
           '<input id="customPress" maxlength="90" placeholder="e.g. Study for your test tomorrow — 20 minutes, books open" />' +
-          '<span class="hint">Your own words get checked against the rules and her won\'t-do list before any coin moves.</span></div>' +
-          '<p class="step-label">Step 2 — How many coins?</p>' +
+          '<span class="hint">Your own words get checked against the rules and her won\'t-do list before any cash moves.</span></div>' +
+          '<p class="step-label">Step 2 — How much cash?</p>' +
           '<div class="field" style="margin-bottom:4px;"><div class="amt-chips" id="amtChips">' +
-          [25, 50, 100, 150].map(function (a) { return '<button type="button" class="amt-chip' + (a === room.selAmt ? " sel" : "") + '" data-amt="' + a + '">' + a + '</button>'; }).join("") +
-          '</div><input id="customAmt" type="number" min="10" max="5000" step="5" value="' + room.selAmt + '" aria-label="Custom coin amount" /></div>' +
+          [25, 50, 100, 150].map(function (a) { return '<button type="button" class="amt-chip' + (a === room.selAmt ? " sel" : "") + '" data-amt="' + a + '">$' + a + '</button>'; }).join("") +
+          '</div><input id="customAmt" type="number" min="10" max="5000" step="5" value="' + room.selAmt + '" aria-label="Custom cash amount" /></div>' +
           '<div class="split-preview" id="splitPreview"></div>' +
           '<button class="btn btn-x" id="sendPress" type="button" style="width:100%;justify-content:center;font-size:18px;min-height:60px;">Step 3 — Send it</button>' +
-          '<p class="hint" style="margin-top:9px;">Coins wait safe until she does it. She skips? You get every coin back, right away.</p>' +
+          '<p class="hint" style="margin-top:9px;">Cash waits safe until she does it. She skips? You get every dollar back, right away.</p>' +
           '<div class="press-feed" id="pressFeed"></div>' +
           '</div></div>' +
           '<div class="room-side">' +
           '<div class="panel-box"><h3>Room chat</h3><div class="chat-feed" id="chatFeed"></div></div>' +
-          '<div class="panel-box"><h3>Your coins &amp; your time</h3>' +
-          '<p style="color:var(--ink-soft);font-size:14.5px;">Balance: <b style="color:var(--ink);" id="roomBal">' + fmt(state.balance) + ' coins</b> · Held: <b style="color:var(--ink);" id="roomHeld">' + fmt(state.held) + '</b></p>' +
+          '<div class="panel-box"><h3>Your cash &amp; your time</h3>' +
+          '<p style="color:var(--ink-soft);font-size:14.5px;">Balance: <b style="color:var(--ink);" id="roomBal">' + '$' + fmt(state.balance) + '</b> · Held: <b style="color:var(--ink);" id="roomHeld">' + fmt(state.held) + '</b></p>' +
           '<p style="color:var(--ink-soft);font-size:14.5px;margin-top:8px;">She gets 3 minutes to say yes, 20 minutes to do it, and you get 15 minutes to tap Done. In this demo it all happens in seconds.</p></div>' +
           '<div class="panel-box"><h3>How she\'s feeling — right now</h3>' + needsHTML(s) + '<p style="color:var(--ink-soft);font-size:13.5px;margin-top:9px;">Every move she finishes fills her bars back up. You pay, she does it, she feels better. That\'s the whole game.</p></div>' +
           '<div class="panel-box"><h3>Her hard limits</h3><ul class="will-list">' +
@@ -1395,8 +1399,8 @@
         var el = $("splitPreview"); if (!el) return;
         var amt = room.selAmt || 0;
         var house = Math.round(amt * 0.05), simGets = amt - house;
-        el.innerHTML = "If she does it: <b>" + fmt(simGets) + " coins to " + esc(room.sim.name) + "</b> · <b>" + fmt(house) + " to the house (5%)</b> · skip or blocked = all your coins back.";
-        var rb = $("roomBal"); if (rb) rb.textContent = fmt(state.balance) + " coins";
+        el.innerHTML = "If she does it: <b>" + "$" + fmt(simGets) + " to " + esc(room.sim.name) + "</b> · <b>" + fmt(house) + " to the house (5%)</b> · skip or blocked = all your cash back.";
+        var rb = $("roomBal"); if (rb) rb.textContent = "$" + fmt(state.balance);
         var rh = $("roomHeld"); if (rh) rh.textContent = fmt(state.held);
       }
 
@@ -1409,7 +1413,7 @@
       }
       function setPressUI(p, stateTxt, cls, note, actionsHTML) {
         var d = $("press-" + p.id); if (!d) return;
-        d.innerHTML = '<div class="p-top"><span class="p-state ' + cls + '">' + stateTxt + '</span><span class="p-move">' + esc(p.text) + '</span><span class="p-amt">' + fmt(p.amount) + ' coins</span></div>' +
+        d.innerHTML = '<div class="p-top"><span class="p-state ' + cls + '">' + stateTxt + '</span><span class="p-move">' + esc(p.text) + '</span><span class="p-amt">' + '$' + fmt(p.amount) + '</span></div>' +
           (note ? '<div class="p-note">' + note + '</div>' : '') +
           (actionsHTML ? '<div class="p-actions">' + actionsHTML + '</div>' : '');
       }
@@ -1419,29 +1423,29 @@
         var picked = currentPressText();
         var amt = room.selAmt || 0;
         if (!picked) { toast("Pick a move from her list, or write your own first.", "bad"); return; }
-        if (amt < 10) { toast("The smallest move costs 10 coins.", "bad"); return; }
-        if (amt > state.balance) { toast("Not enough coins — load a pack in the Coin Bank.", "bad"); return; }
+        if (amt < 10) { toast("The smallest move costs $10.", "bad"); return; }
+        if (amt > state.balance) { toast("Not enough cash — load a pack in the Cash Bank.", "bad"); return; }
         var p = { id: ++room.pressSeq, text: picked.text, amount: amt, sim: s };
         pressCard(p);
 
-        /* Rulebook screen — runs before a single coin moves */
+        /* Rulebook screen — runs before any cash moves */
         var hit = bannedHit(p.text);
         if (hit) {
           var d = $("press-" + p.id); if (d) d.classList.add("blocked");
           setPressUI(p, "✕ BLOCKED BY THE RULES", "st-block",
-            "This request asks for something on the never-allowed list (\"" + esc(hit) + "\"). No coins moved.", "");
+            "This request asks for something on the never-allowed list (\"" + esc(hit) + "\"). No cash moved.", "");
           addLedger("Blocked request — no charge (" + s.name + ")", 0);
           chatLine("A request just got blocked by the rules. The game protects its Sims.", true);
-          toast("Blocked by the rules. No coins moved.", "bad");
+          toast("Blocked by the rules. No cash moved.", "bad");
           return;
         }
 
         /* Escrow: balance -> held */
         state.balance -= amt; state.held += amt; state.pressesToday++;
-        addLedger("Coins held safe for a move — " + p.text + " (" + s.name + ")", -amt);
+        addLedger("Cash held safe for a move — " + p.text + " (" + s.name + ")", -amt);
         renderWallet(); updateSplit();
-        setPressUI(p, "◐ HELD SAFE", "st-held", s.name + " has 3 minutes to say yes or skip it. Skip = all your coins back.", "");
-        chatLine('<span class="c-name">You:</span> paid for "' + esc(p.text) + '" — ' + fmt(amt) + " coins held safe");
+        setPressUI(p, "◐ HELD SAFE", "st-held", s.name + " has 3 minutes to say yes or skip it. Skip = all your cash back.", "");
+        chatLine('<span class="c-name">You:</span> paid for "' + esc(p.text) + '" — $' + fmt(amt) + " held safe");
 
         var lowText = p.text.toLowerCase();
         var willSkip = picked.custom && s.wontKeys.some(function (k) { return lowText.indexOf(k) !== -1; });
@@ -1450,11 +1454,11 @@
           if (!$("press-" + p.id)) return;
           if (willSkip) {
             state.held -= amt; state.balance += amt;
-            addLedger(s.name + " skipped a move — all coins back", amt);
+            addLedger(s.name + " skipped a move — all cash back", amt);
             renderWallet(); updateSplit();
-            setPressUI(p, "↩ SKIPPED — REFUNDED", "st-ref", s.name + ": \"That's on my won't-do list. Your coins are back — pick from my list.\"", "");
-            chatLine(s.name + " skipped a move that crossed her list. Coins went right back.", true);
-            toast("Skipped — " + fmt(amt) + " coins refunded.", "");
+            setPressUI(p, "↩ SKIPPED — REFUNDED", "st-ref", s.name + ": \"That's on my won't-do list. Your cash is back — pick from my list.\"", "");
+            chatLine(s.name + " skipped a move that crossed her list. Cash went right back.", true);
+            toast("Skipped — " + "$" + fmt(amt) + " cash refunded.", "");
             return;
           }
           setPressUI(p, "▶ ACCEPTED — PLAYING IT NOW", "st-doing", s.name + " took the Press. Watch the stage…", "");
@@ -1474,7 +1478,7 @@
             if (!$("press-" + p.id)) return;
             setPressUI(p, "◐ DONE — YOUR TURN", "st-wait",
               "She did it live. Tap Done within 15 minutes to pay her — or ask for a check and the house watches the tape.",
-              '<button class="btn btn-y" type="button" data-confirm="' + p.id + '"><span class="abtn Y" style="background:#241a00;color:var(--y-yellow);width:24px;height:24px;font-size:12px;">Y</span> Done — pay her ' + fmt(amt) + ' coins</button>' +
+              '<button class="btn btn-y" type="button" data-confirm="' + p.id + '"><span class="abtn Y" style="background:#241a00;color:var(--y-yellow);width:24px;height:24px;font-size:12px;">Y</span> Done — pay her $' + fmt(amt) + '</button>' +
               '<button class="btn btn-ghost" type="button" data-dispute="' + p.id + '">Ask for a check</button>');
             var feed = $("pressFeed");
             feed.querySelector('[data-confirm="' + p.id + '"]').addEventListener("click", function () { confirmPress(p); });
@@ -1495,21 +1499,21 @@
         $("worldPct").textContent = Math.round(100 - state.tulsaShare) + "%";
         $("vtBar").style.width = state.tulsaShare + "%";
         setPressUI(p, "✓ PAID — MOVE #" + state.combos + " DONE", "st-paid",
-          fmt(simGets) + " coins to " + s.name + ", " + fmt(house) + " to the house. All done. That's the game.", "");
-        chatLine("MOVE DONE. " + s.name + " got paid " + fmt(simGets) + " coins. Tulsa holds.", true);
+          "$" + fmt(simGets) + " to " + s.name + ", $" + fmt(house) + " to the house. All done. That's the game.", "");
+        chatLine("MOVE DONE. " + s.name + " got paid $" + fmt(simGets) + ". Tulsa holds.", true);
         flyCoins();
-        toast("Paid! " + fmt(simGets) + " to " + s.name + " · moves you have paid for: " + state.combos, "good");
+        toast("Paid! $" + fmt(simGets) + " to " + s.name + " · moves you have paid for: " + state.combos, "good");
       }
       function disputePress(p) {
         var s = p.sim, amt = p.amount;
-        setPressUI(p, "⚖ CHECKING — COINS HELD", "st-wait", "The house is watching the room recording. Nobody gets paid while a check is open.", "");
+        setPressUI(p, "⚖ CHECKING — CASH HELD", "st-wait", "The house is watching the room recording. Nobody gets paid while a check is open.", "");
         setTimeout(function () {
           if (!$("press-" + p.id)) return;
           state.held -= amt; state.balance += amt;
-          addLedger("House check — all coins back (" + s.name + ")", amt);
+          addLedger("House check — all cash back (" + s.name + ")", amt);
           renderWallet(); updateSplit();
-          setPressUI(p, "↩ CHECK DONE — COINS BACK", "st-ref", "The house checked: she did not do the move as written. All " + fmt(amt) + " coins are back with you.", "");
-          toast("Check done — all your coins are back.", "");
+          setPressUI(p, "↩ CHECK DONE — CASH BACK", "st-ref", "The house checked: she did not do the move as written. All $" + fmt(amt) + " is back with you.", "");
+          toast("Check done — all your cash is back.", "");
         }, 3500);
       }
       function flyCoins() {
@@ -1568,9 +1572,9 @@
         if (pk) {
           var n = parseInt(pk.getAttribute("data-pack"), 10);
           state.balance += n;
-          addLedger("Coin pack loaded — " + fmt(n) + " test coins", n);
+          addLedger("Cash pack loaded — $" + fmt(n) + " test cash", n);
           renderWallet();
-          toast(fmt(n) + " test coins loaded. Go play Tulsa.", "good");
+          toast("$" + fmt(n) + " test cash loaded. Go play Tulsa.", "good");
         }
       });
       $("logoHome").addEventListener("click", function (e) { e.preventDefault(); showView("lobby"); });
@@ -1642,7 +1646,7 @@
       });
 
       /* ================= INIT ================= */
-      state.ledger.push({ time: nowTime(), label: "Welcome bonus — test coins", amt: 500, bal: 500 });
+      state.ledger.push({ time: nowTime(), label: "Welcome bonus — test cash", amt: 500, bal: 500 });
       renderRoster(); renderBoard(); renderWallet(); renderLedger();
     </script>
   </body>
