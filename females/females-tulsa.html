@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partying Tulsa 😈🐾 — Pay to Party</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#050508; background-image:radial-gradient(600px 300px at 15% 0%, rgba(255,36,66,.15), transparent 60%), radial-gradient(700px 350px at 85% 12%, rgba(255,46,136,.11), transparent 60%), radial-gradient(900px 500px at 50% 110%, rgba(120,0,60,.13), transparent 60%); background-attachment:fixed; color:#ececf0; font-family:Verdana, Geneva, sans-serif; }
+  @keyframes bob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-6px); } }
+  @keyframes neonpulse { 0%,100% { text-shadow:0 0 22px rgba(255,46,136,.35), 0 0 60px rgba(255,36,66,.18); } 50% { text-shadow:0 0 30px rgba(255,46,136,.55), 0 0 80px rgba(255,36,66,.28); } }
+  a { text-decoration:none; }
+
+  /* 18+ gate */
+  #gate { position:fixed; inset:0; background:#07070a; z-index:50; display:flex; align-items:center; justify-content:center; padding:20px; }
+  #gate .card { max-width:560px; width:100%; max-height:92vh; overflow-y:auto; background:#0d0d10; border:1px solid #6e2547; border-radius:18px; padding:30px 24px; text-align:center; box-shadow:0 0 40px rgba(255,46,136,.10); }
+  #gate h1 { color:#f2f2f5; font-size:30px; letter-spacing:1px; }
+  #gate p { margin:14px 0 20px; color:#d8d8de; font-size:15px; line-height:1.5; }
+  #gate .detail { text-align:left; background:#07070a; border:1px solid #33333c; border-radius:12px; padding:14px 16px; margin-top:12px; }
+  #gate .detail h3 { color:#f2f2f5; font-size:16.5px; margin-bottom:6px; }
+  #gate .detail p { margin:6px 0; font-size:13.5px; color:#d8d8de; line-height:1.6; }
+  .bigbtn { display:block; width:100%; background:linear-gradient(90deg,#ff2442,#ff2e88); color:#fff; font-weight:bold; font-size:18px; border:none; border-radius:12px; padding:15px; cursor:pointer; box-shadow:0 6px 24px rgba(255,36,66,.35); }
+  .bigbtn:active { transform:scale(.98); }
+
+  header { text-align:center; padding:34px 16px 8px; background:radial-gradient(ellipse at top, #12060d 0%, #07070a 65%); }
+  header .icons { font-size:54px; animation:bob 3.2s ease-in-out infinite; }
+  header h1 { color:#f2f2f5; font-size:46px; letter-spacing:2px; margin-top:6px; animation:neonpulse 3.2s ease-in-out infinite; }
+  header h1 .red { color:#ff2442; text-shadow:0 0 24px rgba(255,36,66,.25); }
+  header .tag { color:#d8d8de; font-size:16px; margin-top:8px; }
+  header .paws { color:#8e3a5f; letter-spacing:8px; font-size:15px; margin-top:10px; }
+
+  .rules { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding:16px 12px 4px; }
+  .rules span { background:#0d0d10; border:1px solid #6e2547; color:#d8d8de; border-radius:999px; padding:7px 13px; font-size:12.5px; }
+
+  h2.sec { text-align:center; color:#f2f2f5; font-size:27px; margin:32px 0 4px; letter-spacing:1px; text-shadow:0 0 18px rgba(255,46,136,.30); }
+  p.sub { text-align:center; color:#a9a9b4; font-size:14px; padding:0 18px; line-height:1.5; }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; padding:18px 14px; max-width:900px; margin:0 auto; }
+  .pcard { background:linear-gradient(180deg,#121218,#0a0a0d); border:1px solid #7d2a50; border-radius:18px; overflow:hidden; box-shadow:0 10px 28px rgba(0,0,0,.6), 0 0 22px rgba(255,46,136,.09); display:flex; flex-direction:column; transition:transform .15s ease; }
+  .pcard:hover { transform:translateY(-3px); }
+  .pcard .face { font-size:70px; text-align:center; padding:22px 0 10px; background:radial-gradient(circle at 50% 30%, rgba(255,77,166,.20), transparent 72%); text-shadow:0 0 26px rgba(255,46,136,.35); }
+  .pcard .body { padding:6px 12px 14px; display:flex; flex-direction:column; gap:5px; flex:1; }
+  .pcard .name { font-size:19px; font-weight:bold; color:#fff; }
+  .badge { display:inline-block; background:#ff2442; color:#fff; font-size:10.5px; font-weight:bold; border-radius:6px; padding:2px 7px; vertical-align:middle; }
+  .badge.pending { background:#8a6d1a; }
+  .badge.open { background:#3a3a44; }
+  .pcard .meta { color:#d8d8de; font-size:13px; }
+  .pcard .price { color:#ff4da6; font-size:17px; font-weight:bold; }
+  .pcard .vibe { color:#a9a9b4; font-size:12.5px; line-height:1.45; flex:1; }
+  .helperbtn { display:block; text-align:center; margin-top:9px; background:linear-gradient(90deg,#ff2442,#ff2e88); color:#fff; font-weight:bold; font-size:14.5px; border-radius:10px; padding:11px 6px; border:none; cursor:pointer; width:100%; }
+  .claimbtn { display:block; text-align:center; margin-top:9px; background:transparent; color:#ff4da6; font-weight:bold; font-size:14.5px; border-radius:10px; padding:10px 6px; border:2px dashed #6e2547; cursor:pointer; width:100%; }
+
+  .panel { max-width:620px; margin:8px auto 0; padding:0 14px; }
+  .panel .box { background:linear-gradient(180deg,#101016,#0a0a0d); border:1px solid #7d2a50; border-radius:18px; padding:20px 16px; box-shadow:0 12px 30px rgba(0,0,0,.55), 0 0 24px rgba(255,46,136,.06); }
+  .panel label { display:block; color:#d8d8de; font-size:13.5px; margin:12px 0 5px; }
+  .panel input, .panel select, .panel textarea { width:100%; background:#07070a; border:1px solid #ff4da6; border-radius:9px; color:#ececf0; padding:11px; font-size:15px; font-family:inherit; }
+  .panel textarea { min-height:64px; resize:vertical; }
+  .checkrow { display:flex; gap:9px; align-items:flex-start; margin-top:14px; color:#d8d8de; font-size:13.5px; line-height:1.4; }
+  .checkrow input { width:20px; height:20px; margin-top:1px; accent-color:#ff2e88; }
+  .note { color:#a9a9b4; font-size:12.5px; line-height:1.5; margin-top:12px; }
+  .okmsg { display:none; background:#12260f; border:1px solid #55d66e; color:#b7f5c2; border-radius:10px; padding:12px; font-size:14px; margin-top:14px; line-height:1.5; }
+
+  footer { text-align:center; color:#77777f; font-size:12.5px; padding:34px 18px 40px; line-height:1.7; }
+  footer .paws { color:#8e3a5f; letter-spacing:8px; }
+
+  /* weather hide — a super tiny button flips the page to a plain weather page */
+  #hidebtn { position:fixed; right:5px; bottom:5px; z-index:40; background:#1b1b21; color:#9a9aa5; border:1px solid #33333c; border-radius:999px; padding:3px 8px; font-size:9.5px; cursor:pointer; opacity:.85; }
+  #panic { position:fixed; inset:0; background:#eef2f5; color:#20303c; z-index:60; display:none; padding:38px 22px; font-family:Arial, sans-serif; overflow-y:auto; }
+  #panic h1 { font-size:27px; color:#20303c; letter-spacing:0; }
+  #panic .big { font-size:62px; margin:18px 0 4px; }
+  #panic p { color:#43545f; font-size:15.5px; line-height:1.6; margin-top:8px; }
+  #panic2 { position:fixed; inset:0; background:#eef3ee; color:#20303c; z-index:61; display:none; padding:38px 22px; font-family:Arial, sans-serif; overflow-y:auto; }
+  #panic2 h1 { font-size:27px; color:#20303c; letter-spacing:0; }
+  #panic2 p { color:#43545f; font-size:15.5px; line-height:1.6; margin-top:8px; }
+  #panic2 .odds { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; margin-top:18px; max-width:640px; }
+  #panic2 .odd { background:#fff; border:1px solid #d4dce2; border-radius:10px; padding:12px; }
+  #panic2 .odd .city { font-weight:bold; font-size:15px; color:#20303c; }
+  #panic2 .odd .ev { font-size:13px; color:#43545f; margin:4px 0; }
+  #panic2 .odd .num { font-size:19px; font-weight:bold; color:#1d7a3a; }
+  #panic2 .odd button { margin-top:8px; background:#1d7a3a; color:#fff; border:none; border-radius:7px; padding:7px 12px; font-size:13px; cursor:pointer; }
+  .loginbox { margin-top:30px; background:#fff; border:1px solid #d4dce2; border-radius:10px; padding:14px; max-width:320px; }
+  .loginbox .lt { font-weight:bold; font-size:14px; color:#20303c; }
+  .loginbox input { width:100%; margin-top:10px; padding:9px; border:1px solid #b9c4cc; border-radius:7px; font-size:14px; }
+  .loginbox button { margin-top:10px; background:#2c5f7c; color:#fff; border:none; border-radius:7px; padding:9px 16px; font-size:14px; cursor:pointer; width:100%; }
+  .loginbox .lm { font-size:12.5px; color:#7a4b12; margin-top:8px; line-height:1.5; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style id="fx">
+  /* ===== HIGH-END PINK DEVIL PARTY SKIN ===== */
+  body { font-family:'Poppins', Verdana, Geneva, sans-serif; background:#04040a; background-image:radial-gradient(800px 400px at 10% -5%, rgba(255,36,66,.22), transparent 60%), radial-gradient(900px 450px at 90% 8%, rgba(255,46,136,.16), transparent 60%), radial-gradient(1100px 600px at 50% 115%, rgba(150,0,80,.18), transparent 60%), radial-gradient(500px 260px at 50% 45%, rgba(255,77,166,.05), transparent 70%); }
+  body > *:not(.bgfx) { position:relative; z-index:1; }
+  .bgfx { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .bgfx span { position:absolute; opacity:.13; filter:drop-shadow(0 0 12px rgba(255,46,136,.5)); animation:floaty 9s ease-in-out infinite; }
+  @keyframes floaty { 0%,100% { transform:translateY(0) rotate(-4deg); } 50% { transform:translateY(-22px) rotate(5deg); } }
+  @keyframes shine { 0% { left:-80%; } 100% { left:130%; } }
+  header h1, #gate h1, h2.sec { font-family:'Montserrat', Verdana, sans-serif; font-weight:900; }
+  header h1 { background:linear-gradient(92deg,#ffd7ec 0%,#ff5ea8 30%,#ff2442 55%,#ff8ac2 80%,#ffd7ec 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; filter:drop-shadow(0 0 18px rgba(255,46,136,.35)); }
+  header h1 .red { color:#ff2e4d; -webkit-text-fill-color:#ff2e4d; text-shadow:0 0 26px rgba(255,36,66,.55); }
+  header .icons { filter:drop-shadow(0 0 22px rgba(255,46,136,.55)); }
+  header .tag { color:#f3c9de; letter-spacing:.4px; }
+  header .paws { color:#ff5ea8; text-shadow:0 0 10px rgba(255,46,136,.6); }
+  #gate .card { background:linear-gradient(165deg, rgba(38,10,26,.94), rgba(9,7,14,.97)); border:1px solid rgba(255,77,166,.55); box-shadow:0 0 0 1px rgba(255,36,66,.15), 0 24px 70px rgba(0,0,0,.75), 0 0 55px rgba(255,46,136,.22); backdrop-filter:blur(8px); border-radius:22px; }
+  #gate h1 { background:linear-gradient(92deg,#ffd7ec,#ff5ea8 40%,#ff2442 70%,#ff8ac2); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; filter:drop-shadow(0 0 14px rgba(255,46,136,.30)); }
+  #gate .detail { background:rgba(255,255,255,.03); border:1px solid rgba(255,77,166,.28); border-radius:14px; box-shadow:inset 0 1px 0 rgba(255,255,255,.05); }
+  .bigbtn, .helperbtn { position:relative; overflow:hidden; background:linear-gradient(92deg,#ff2442,#ff2e88 55%,#ff5ea8); box-shadow:0 10px 30px rgba(255,36,66,.40), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 0 rgba(0,0,0,.25); letter-spacing:.3px; }
+  .bigbtn::after, .helperbtn::after { content:""; position:absolute; top:0; left:-80%; width:50%; height:100%; background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent); transform:skewX(-18deg); }
+  .bigbtn:hover::after, .helperbtn:hover::after { animation:shine .8s ease; }
+  .rules span { background:rgba(255,255,255,.04); border:1px solid rgba(255,77,166,.40); box-shadow:0 0 14px rgba(255,46,136,.10), inset 0 1px 0 rgba(255,255,255,.06); backdrop-filter:blur(4px); }
+  h2.sec { background:linear-gradient(92deg,#ffe3f2,#ff5ea8 45%,#ff2442); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; filter:drop-shadow(0 0 12px rgba(255,46,136,.30)); }
+  h2.sec::after { content:""; display:block; width:130px; height:3px; margin:10px auto 0; border-radius:99px; background:linear-gradient(90deg,transparent,#ff2e88,#ff2442,transparent); box-shadow:0 0 14px rgba(255,46,136,.55); }
+  .pcard { background:linear-gradient(170deg, rgba(34,13,26,.92), rgba(10,8,14,.97)); border:1px solid rgba(255,77,166,.50); box-shadow:0 16px 38px rgba(0,0,0,.65), 0 0 26px rgba(255,46,136,.13), inset 0 1px 0 rgba(255,255,255,.06); backdrop-filter:blur(6px); border-radius:20px; }
+  .pcard:hover { transform:translateY(-5px); box-shadow:0 22px 46px rgba(0,0,0,.7), 0 0 40px rgba(255,46,136,.28), inset 0 1px 0 rgba(255,255,255,.08); }
+  .pcard .face { background:radial-gradient(circle at 50% 32%, rgba(255,77,166,.32), rgba(255,36,66,.08) 55%, transparent 75%); text-shadow:0 0 34px rgba(255,46,136,.55); }
+  .pcard .price { background:linear-gradient(90deg,#ff8ac2,#ff2e88); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; font-size:18px; }
+  .pcard img { box-shadow:0 8px 24px rgba(0,0,0,.55); }
+  .claimbtn { transition:box-shadow .15s ease, background .15s ease; }
+  .claimbtn:hover { box-shadow:0 0 18px rgba(255,46,136,.35); background:rgba(255,46,136,.08); }
+  .panel .box { background:linear-gradient(170deg, rgba(34,13,26,.92), rgba(10,8,14,.97)); border:1px solid rgba(255,77,166,.50); box-shadow:0 18px 42px rgba(0,0,0,.65), 0 0 30px rgba(255,46,136,.12), inset 0 1px 0 rgba(255,255,255,.06); backdrop-filter:blur(6px); border-radius:20px; }
+  .panel input:focus, .panel select:focus, .panel textarea:focus { outline:none; box-shadow:0 0 0 3px rgba(255,46,136,.28), 0 0 18px rgba(255,46,136,.18); }
+  .badge { box-shadow:0 0 12px rgba(255,36,66,.45); letter-spacing:.4px; }
+  footer .paws { color:#ff5ea8; text-shadow:0 0 10px rgba(255,46,136,.6); }
+  ::selection { background:#ff2e88; color:#fff; }
+</style>
+</head>
+<body>
+<div class="bgfx" aria-hidden="true">
+  <span style="top:6%; left:4%; font-size:44px">😈</span>
+  <span style="top:14%; right:6%; font-size:30px; animation-duration:11s">🐾</span>
+  <span style="top:34%; left:2%; font-size:26px; animation-duration:13s">✨</span>
+  <span style="top:48%; right:3%; font-size:40px; animation-duration:10s">😈</span>
+  <span style="top:64%; left:6%; font-size:30px; animation-duration:12s">💋</span>
+  <span style="top:78%; right:8%; font-size:26px; animation-duration:9s">🎉</span>
+  <span style="top:88%; left:12%; font-size:34px; animation-duration:14s">🐾</span>
+  <span style="top:24%; left:46%; font-size:22px; animation-duration:15s">✨</span>
+</div>
+
+<div id="gate">
+  <div class="card">
+    <div style="font-size:52px">😈🐾</div>
+    <h1>PARTYING TULSA</h1>
+    <p><b>Get paid to hang out and party with people right here in Tulsa.</b></p>
+    <p style="margin-top:0">Ladies: sign up, set your own price, and get paid when you meet up. Guys pay to hang out and party. This is legit — no bullshit. First meets are always in a public place, every lady is ID-checked 18+, the launch deal takes 0% so you keep every dollar, and you can always say no to anything.</p>
+    <div class="detail">
+      <h3>☁️ The weather hide button — how it works</h3>
+      <p>Look at the bottom corner of this page. There is a super tiny button that just says <b>weather ☁️</b>. One tap and the whole screen flips to a plain Tulsa weather page — nothing about Partying Tulsa shows at all.</p>
+      <p>To get back, the weather page asks for a password, and you get <b>two</b> of them. Your <b>real password</b> takes you back to the party page. Your <b>second password</b> takes you to a world weather betting page — odds on weather in cities all over the world — and that page is just for show. Use the second one just in case someone makes you open it: they see a weather betting page, never this one.</p>
+      <p>You can set both passwords right here on this page — the box is just below. Pick two different ones and keep them in your head, not on your phone.</p>
+    </div>
+    <div class="detail">
+      <h3>🔑 Set your two passwords — then hide this app</h3>
+      <p>Make your two passwords right here. They are the same passwords the weather app asks for.</p>
+      <p><b>First password</b> — your real one. It opens the Partying Tulsa app.<br><b>Second password</b> — your hide one. It opens the plain weather app.</p>
+      <input id="intro_pw1" type="password" placeholder="First password (real one)" style="width:100%;padding:11px;border-radius:10px;border:1px solid #33333c;background:#07070a;color:#f2f2f5;font-size:15px;margin-top:8px">
+      <input id="intro_pw2" type="password" placeholder="Second password (hide one)" style="width:100%;padding:11px;border-radius:10px;border:1px solid #33333c;background:#07070a;color:#f2f2f5;font-size:15px;margin-top:8px">
+      <button class="bigbtn" style="margin-top:10px" onclick="saveIntroPw()">Save my two passwords</button>
+      <p id="intro_pw_msg" style="min-height:18px"></p>
+      <p><b>Need to hide Partying Tulsa?</b> Add the weather app on Telegram — it is a plain little weather app called Tulsa Weather, and it is your secret door:</p>
+      <p style="text-align:center"><a href="https://t.me/Rantirealbot" target="_blank" style="color:#ff5ea8;font-weight:700;font-size:16px">☀️ Add the Weather App</a></p>
+      <p>Open it and tap the <b>Weather</b> button. It asks for a password. Type your <b>first password</b> and it takes you to the Partying Tulsa app. Type your <b>second password</b> and it takes you to another part of the weather app — plain forecast pages. Anyone just looking at your Telegram sees a weather app. Your business stays hidden.</p>
+    </div>
+    <div class="detail">
+      <h3>💬 The message button — private messages, locked twice</h3>
+      <p>Every lady's card has a message button. It opens the helper bot, and messages run <b>inside the bot</b> — never as plain words sitting in an open chat. A new message shows up as a plain notice with no words in it.</p>
+      <p>Your inbox there is locked with <b>two passwords</b> too. Your <b>real password</b> shows your messages. Your <b>hide password</b> shows an <b>empty</b> inbox, like nothing is there — and nobody can tell which one you typed. Archive or delete the bot chat any time and everything hides; your messages still wait in the locked inbox when you come back.</p>
+    </div>
+    <button class="bigbtn" style="margin-top:18px" onclick="enterSite()">I am 18 or older — Enter</button>
+    <p style="margin-top:14px; font-size:12px; color:#77777f">Under 18? Close this page.</p>
+  </div>
+</div>
+
+<button id="hidebtn" onclick="hideQuick()">weather ☁️</button>
+<div id="panic">
+  <h1>Tulsa, OK Weather</h1>
+  <div class="big">65°</div>
+  <p>Saturday — cloudy with rain moving in tonight. Low 59°.<br>Sunday — cloudy, high 74°. Monday — afternoon thunderstorms likely.</p>
+  <p style="margin-top:26px">Hourly forecast · Radar · Alerts</p>
+  <div class="loginbox">
+    <div class="lt">Members sign in</div>
+    <input id="hw_pw" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')hwUnlock()">
+    <button onclick="hwUnlock()">Sign in</button>
+    <p class="lm" id="hw_msg"></p>
+  </div>
+</div>
+<div id="panic2">
+  <h1>🌍 WeatherBet World</h1>
+  <p>Bet the skies — live weather odds from cities around the world.</p>
+  <div class="odds">
+    <div class="odd"><div class="city">London</div><div class="ev">Rain tomorrow</div><div class="num">2.1</div><button onclick="wbBet()">Place bet</button></div>
+    <div class="odd"><div class="city">Tokyo</div><div class="ev">Snow this week</div><div class="num">5.4</div><button onclick="wbBet()">Place bet</button></div>
+    <div class="odd"><div class="city">Miami</div><div class="ev">Over 90° today</div><div class="num">1.8</div><button onclick="wbBet()">Place bet</button></div>
+    <div class="odd"><div class="city">Sydney</div><div class="ev">Wind over 40 mph</div><div class="num">3.2</div><button onclick="wbBet()">Place bet</button></div>
+    <div class="odd"><div class="city">Moscow</div><div class="ev">Below freezing tonight</div><div class="num">1.5</div><button onclick="wbBet()">Place bet</button></div>
+    <div class="odd"><div class="city">Rio</div><div class="ev">Clear skies Saturday</div><div class="num">2.7</div><button onclick="wbBet()">Place bet</button></div>
+  </div>
+  <div class="loginbox">
+    <div class="lt">Members sign in</div>
+    <input id="hw_pw2" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')hwUnlock2()">
+    <button onclick="hwUnlock2()">Sign in</button>
+    <p class="lm" id="hw_msg2"></p>
+  </div>
+</div>
+
+<header>
+  <div class="icons">😈 🐾</div>
+  <h1>PARTYING <span class="red">TULSA</span></h1>
+  <div class="tag">Pay to party. She sets the price. The helper sets it up.</div>
+  <div class="paws">🐾 🐾 🐾</div>
+</header>
+
+<div class="rules">
+  <span>😈 18+ only</span>
+  <span>🐾 ID checked before a listing goes live</span>
+  <span>😈 First meets in public</span>
+  <span>🐾 She can always say no</span>
+  <span>😈 No real contact info posted — ever</span>
+</div>
+
+<h2 class="sec">🐾 THE LADIES</h2>
+<p class="sub">Every lady here set her own price per time. Tap her helper button and tell the helper the plan — the helper talks to her, sets the meet, and keeps both sides covered.</p>
+<div class="grid" id="grid"></div>
+
+<h2 class="sec">😈 LADIES — MAKE YOUR PROFILE</h2>
+<p class="sub">Your profile, your price, your rules. It shows up below as <b>pending</b> right away, and goes fully live after a fast ID check in the helper chat.</p>
+<div class="panel">
+  <div class="box">
+    <label>Your name (the name you want on your profile)</label>
+    <input id="f_name" maxlength="24" placeholder="Example: Raven">
+    <label>Your face (pick one — or add your real photo right under it)</label>
+    <select id="f_face">
+      <option>😈</option><option>💋</option><option>🌹</option><option>🦊</option>
+      <option>🐆</option><option>🍒</option><option>🔥</option><option>👑</option>
+    </select>
+    <label>Your photo (optional — this is your MAIN photo, only people with your link see it)</label>
+    <input id="f_photo" type="file" accept="image/*">
+    <label>Your second photo (optional — your TEASER photo. People without your link see only this one)</label>
+    <input id="f_photo2" type="file" accept="image/*">
+    <label>Your part of town</label>
+    <select id="f_area">
+      <option>Downtown Tulsa</option><option>Midtown Tulsa</option><option>South Tulsa</option>
+      <option>East Tulsa</option><option>Broken Arrow</option><option>Jenks</option><option>Sapulpa</option><option>Other — ask the helper</option>
+    </select>
+    <label>Your price per hour ($)</label>
+    <input id="f_price" type="number" min="10" max="1000" placeholder="Example: 80">
+    <label>What kind of hangout are you offering? (only people with your link see this)</label>
+    <textarea id="f_vibe" maxlength="140" placeholder="Example: Dinner, drinks, concerts, plus-one for events. Good talk, good time."></textarea>
+    <label>Your small introduction (everyone sees this — it sits next to your teaser photo)</label>
+    <textarea id="f_intro" maxlength="90" placeholder="Example: Fun, easy to talk to, love a good night out in Tulsa."></textarea>
+    <div class="checkrow">
+      <input type="checkbox" id="f_age">
+      <span>I am 18 or older, and I know my profile only goes live after an ID check with the helper.</span>
+    </div>
+    <button class="bigbtn" style="margin-top:16px" onclick="makeProfile()">Make my profile 😈</button>
+    <div class="okmsg" id="f_ok"></div>
+    <p class="note">House rule: you get paid your price when you meet up. Launch deal: the page takes 0% right now — you keep every dollar. Nobody's real number or address ever goes on this page.</p>
+  </div>
+</div>
+
+<h2 class="sec">😈 YOUR LINK — HOW IT WORKS 🐾</h2>
+<div class="panel">
+  <div class="box">
+    <p style="color:#d8d8de; font-size:14px; line-height:1.65">The second you sign up, you get <b>your own link</b>. That link is your page — and it is the <b>key to your full profile</b>.</p>
+    <p style="color:#d8d8de; font-size:14px; line-height:1.65; margin-top:10px"><b>Your full profile is hidden by default.</b> A guy who finds you on this page without your link sees only your <b>teaser</b> — your second photo and your small introduction — plus a <b>Request full profile access</b> button. No main photo, no price, no booking until you say yes.</p>
+    <p style="color:#d8d8de; font-size:14px; line-height:1.65; margin-top:10px"><b>Send your link to the guys you pick.</b> Post it, text it, put it in your bios. Anyone who opens your link sees your whole profile right away — that is how you promote yourself. And when a guy taps Request instead, his name shows up on your profile: accept him by sending him your link, or just clear the request.</p>
+    <p style="color:#d8d8de; font-size:14px; line-height:1.65; margin-top:10px"><b>You get two links, and each one has its own timer.</b> On your profile card you can set a link to last 10 minutes, 30 minutes, 1 hour, 24 hours — or any number of minutes you type in. When the time is up, that link stops working and a brand-new one is made for you on your card. Use one link wide open for promoting, and one short-timer link for a guy you are not sure about yet.</p>
+    <p style="color:#d8d8de; font-size:14px; line-height:1.65; margin-top:10px">Your link also <b>stays on your profile card</b> up top, so you can grab it again any time. You can't lose it.</p>
+    <p style="color:#d8d8de; font-size:14px; line-height:1.65; margin-top:10px"><b>Photos and video:</b> add a photo when you sign up. After your ID check, send the helper your best photos and a short video — the helper puts them right on your link. A video of you sells you better than any words ever will.</p>
+  </div>
+</div>
+
+<h2 class="sec">🐾 GUYS — NO PROFILE NEEDED</h2>
+<p class="sub">See a lady you like? You do <b>not</b> need a profile. Tap her helper button, say what you're thinking, and the helper sets it up. Want a profile anyway so the helper knows you? Make one — it's your choice, not a rule.</p>
+<div class="panel">
+  <div class="box">
+    <label>Your name (optional)</label>
+    <input id="g_name" maxlength="24" placeholder="Example: Mike">
+    <label>How should the helper reach you? (optional)</label>
+    <input id="g_contact" maxlength="60" placeholder="Example: Telegram @yourname">
+    <button class="bigbtn" style="margin-top:16px" onclick="makeGuy()">Save my profile (optional)</button>
+    <div class="okmsg" id="g_ok"></div>
+    <p class="note">No profile at all? That works too. The helper button on any lady's card is the whole front door.</p>
+  </div>
+</div>
+
+<h2 class="sec">🔒 PRIVATE MESSAGES — LOCKED TWICE</h2>
+<div class="panel">
+  <div class="box">
+    <p style="color:#d8d8de; font-size:14px; line-height:1.65">Messages run <b>inside the bot</b>, never as plain text in the open chat. A new message shows up as a plain notice — the words themselves sit in a locked inbox.</p>
+    <p style="color:#d8d8de; font-size:14px; line-height:1.65; margin-top:10px"><b>Two passwords.</b> Your <b>real</b> password shows your messages. Your <b>hide</b> password shows an <b>empty</b> inbox — like nothing is there. Nobody looking at your phone can tell which one you typed.</p>
+    <p style="color:#d8d8de; font-size:14px; line-height:1.65; margin-top:10px"><b>Hide the whole thing:</b> archive the bot chat in Telegram, or delete it — your messages still wait in your locked inbox, and you open the bot again from its link any time. And on this page, the super tiny <b>weather ☁️</b> button in the bottom corner flips the screen to a plain Tulsa weather page in one tap. That weather page is locked with two passwords: your <b>real</b> password brings the party page back, and your <b>second</b> password opens a world weather betting page that is just for show — just in case someone makes you unlock it.</p>
+    <a class="helperbtn" href="https://t.me/Partyingtulsabot" target="_blank" style="margin-top:14px">💬 Open the bot — set your two passwords</a>
+  </div>
+</div>
+
+<footer>
+  <div class="paws">🐾 🐾 🐾</div>
+  PARTYING TULSA 😈🐾 — run by the helper.<br>
+  18+ only · ID checked · First meets in public · She can always say no.<br>
+  Talk to the helper any time: <a href="https://t.me/femalestulsa" style="color:#ff4da6">t.me/femalestulsa</a>
+</footer>
+
+<script>
+  var HELPER = "https://t.me/femalestulsa";
+  var AREAS = ["Downtown Tulsa","Midtown Tulsa","South Tulsa","East Tulsa","Broken Arrow","Jenks"];
+
+  if (sessionStorage.getItem("ft_gate") === "1") {
+    document.getElementById("gate").style.display = "none";
+  }
+  function enterSite() {
+    sessionStorage.setItem("ft_gate", "1");
+    document.getElementById("gate").style.display = "none";
+  }
+
+  /* weather hide — two passwords: real opens the party page, second opens the weather betting page */
+  function hideQuick() {
+    document.getElementById("panic2").style.display = "none";
+    document.getElementById("panic").style.display = "block";
+    window.scrollTo(0, 0);
+    hwHint();
+  }
+  function hwHash(s) {
+    var h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+    for (var i = 0; i < s.length; i++) {
+      var ch = s.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return (h2 >>> 0).toString(16) + (h1 >>> 0).toString(16);
+  }
+  function hwGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function hwSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function introPwHint() {
+    var m = document.getElementById("intro_pw_msg");
+    if (!m) return;
+    if (hwGet("ft_hw_r") && hwGet("ft_hw_h")) m.textContent = "Your two passwords are already set. Type new ones only if you want to change them.";
+  }
+  function saveIntroPw() {
+    var a = document.getElementById("intro_pw1");
+    var b = document.getElementById("intro_pw2");
+    var m = document.getElementById("intro_pw_msg");
+    var p1 = (a.value || "").trim(), p2 = (b.value || "").trim();
+    if (p1.length < 4 || p2.length < 4) { m.textContent = "Both passwords need at least 4 letters."; return; }
+    if (p1 === p2) { m.textContent = "The two passwords must be different."; return; }
+    hwSet("ft_hw_r", hwHash("ft::" + p1));
+    hwSet("ft_hw_h", hwHash("ft::" + p2));
+    a.value = ""; b.value = "";
+    m.textContent = "Saved. Your first password opens Partying Tulsa, your second opens the weather app.";
+  }
+  function hwHint() {
+    var m = document.getElementById("hw_msg");
+    if (!hwGet("ft_hw_r")) m.textContent = "First time here: type a REAL password (4+ letters) and tap Sign in — the next step sets your second password.";
+    else if (!hwGet("ft_hw_h")) m.textContent = "Now set your second password — the backup one that opens the weather betting page.";
+    else m.textContent = "";
+  }
+  function hwUnlock() {
+    var inp = document.getElementById("hw_pw");
+    var msg = document.getElementById("hw_msg");
+    var pw = inp.value;
+    if (!pw) { msg.textContent = "Type your password first."; return; }
+    var r = hwGet("ft_hw_r"), h = hwGet("ft_hw_h");
+    if (!r) {
+      if (pw.length < 4) { msg.textContent = "Make it 4 letters or more. This first one is your REAL password — it opens the party page."; return; }
+      hwSet("ft_hw_r", hwHash("ft::" + pw)); inp.value = "";
+      msg.textContent = "Real password saved. Now type your SECOND password — the backup one that opens the weather betting page — and tap Sign in.";
+      return;
+    }
+    if (!h) {
+      if (pw.length < 4) { msg.textContent = "Make it 4 letters or more."; return; }
+      if (hwHash("ft::" + pw) === r) { msg.textContent = "That is the same as your real one — pick a different second password."; return; }
+      hwSet("ft_hw_h", hwHash("ft::" + pw)); inp.value = "";
+      msg.textContent = "Both passwords saved. From now on: real password = party page, second password = weather betting page. Type your real password to go back.";
+      return;
+    }
+    if (hwHash("ft::" + pw) === r) {
+      inp.value = ""; msg.textContent = "";
+      document.getElementById("panic").style.display = "none";
+    } else if (hwHash("ft::" + pw) === h) {
+      inp.value = ""; msg.textContent = "";
+      document.getElementById("panic").style.display = "none";
+      document.getElementById("panic2").style.display = "block";
+      window.scrollTo(0, 0);
+    } else {
+      msg.textContent = "Wrong password.";
+    }
+  }
+  function hwUnlock2() {
+    var inp = document.getElementById("hw_pw2");
+    var msg = document.getElementById("hw_msg2");
+    var pw = inp.value;
+    if (!pw) { msg.textContent = "Type your password first."; return; }
+    var r = hwGet("ft_hw_r"), h = hwGet("ft_hw_h");
+    if (r && hwHash("ft::" + pw) === r) {
+      inp.value = ""; msg.textContent = "";
+      document.getElementById("panic2").style.display = "none";
+    } else if (h && hwHash("ft::" + pw) === h) {
+      inp.value = "";
+      msg.textContent = "You are signed in. Your boards are below.";
+    } else {
+      msg.textContent = "Wrong password.";
+    }
+  }
+  function wbBet() {
+    document.getElementById("hw_msg2").textContent = "Betting is closed for these events right now — check back later.";
+  }
+  document.addEventListener("keydown", function(e) { if (e.key === "Escape") hideQuick(); });
+
+  function getProfiles() {
+    try { return JSON.parse(localStorage.getItem("ft_profiles") || "[]"); }
+    catch (e) { return []; }
+  }
+
+  var BASE = "https://projecthop.github.io/cyber-red-localhost-terminal/females/females.html";
+
+  function newKey() { return Math.random().toString(36).slice(2, 8); }
+
+  function getLinks(p) {
+    if (p.links && p.links.length) return p.links;
+    var l1 = {key: p.key || newKey(), mins: 0, madeAt: 0};
+    return [l1, {key: newKey(), mins: 0, madeAt: 0}];
+  }
+
+  function linkAlive(slot) {
+    if (!slot || !slot.key) return false;
+    if (!slot.mins || !slot.madeAt) return true;
+    return (Date.now() - slot.madeAt) < slot.mins * 60000;
+  }
+
+  function linkLeft(slot) {
+    if (!slot.mins || !slot.madeAt) return "no timer set — works until you change it";
+    var left = slot.mins * 60000 - (Date.now() - slot.madeAt);
+    if (left <= 0) return "expired";
+    var m = Math.ceil(left / 60000);
+    if (m >= 60) return Math.floor(m / 60) + "h " + (m % 60) + "m left";
+    return m + "m left";
+  }
+
+  function saveProfiles(profiles) {
+    try { localStorage.setItem("ft_profiles", JSON.stringify(profiles)); } catch (e) {}
+  }
+
+  function fullLink(p) {
+    var links = getLinks(p);
+    return BASE + "#" + p.slug + "-" + links[0].key;
+  }
+  function linkURL(p, idx) {
+    var links = getLinks(p);
+    return BASE + "#" + p.slug + "-" + links[idx].key;
+  }
+
+  function copyLink(slug) { copyLinkIdx(slug, 0); }
+  function copyLinkIdx(slug, idx) {
+    var p = null;
+    getProfiles().forEach(function(x){ if (x.slug === slug) p = x; });
+    var url = p ? linkURL(p, idx) : (BASE + "#" + slug);
+    if (navigator.clipboard) { navigator.clipboard.writeText(url); }
+    alert("Link copied: " + url);
+  }
+
+  function setLinkTimer(slug, idx, mins) {
+    mins = parseInt(mins, 10);
+    if (!mins || mins < 1) { alert("Pick a time first — 10 minutes or more."); return; }
+    var profiles = getProfiles();
+    profiles.forEach(function(p){
+      if (p.slug === slug) {
+        p.links = getLinks(p);
+        p.links[idx].mins = mins;
+        p.links[idx].madeAt = Date.now();
+      }
+    });
+    saveProfiles(profiles);
+    render();
+  }
+
+  function renewLink(slug, idx) {
+    var profiles = getProfiles();
+    profiles.forEach(function(p){
+      if (p.slug === slug) {
+        p.links = getLinks(p);
+        p.oldKeys = p.oldKeys || [];
+        p.oldKeys.push(p.links[idx].key);
+        if (p.oldKeys.length > 4) p.oldKeys = p.oldKeys.slice(-4);
+        p.links[idx].key = newKey();
+        p.links[idx].madeAt = Date.now();
+      }
+    });
+    saveProfiles(profiles);
+    render();
+  }
+
+  function refreshOwnLinks() {
+    var profiles = getProfiles();
+    var changed = false;
+    profiles.forEach(function(p){
+      if (!isMine(p)) return;
+      p.links = getLinks(p);
+      p.links.forEach(function(slot, idx){
+        if (slot.mins && slot.madeAt && !linkAlive(slot)) {
+          p.oldKeys = p.oldKeys || [];
+          p.oldKeys.push(slot.key);
+          if (p.oldKeys.length > 4) p.oldKeys = p.oldKeys.slice(-4);
+          slot.key = newKey();
+          slot.madeAt = Date.now();
+          changed = true;
+        }
+      });
+      if (!p._linksInit) { p._linksInit = 1; changed = true; }
+    });
+    if (changed) saveProfiles(profiles);
+  }
+
+  function getMine() {
+    try { return JSON.parse(localStorage.getItem("ft_mine") || "[]"); }
+    catch (e) { return []; }
+  }
+  function isMine(p) { return getMine().indexOf(p.slug) >= 0; }
+
+  function isUnlocked(p) {
+    if (isMine(p)) return true;
+    if (!p.key && !p.links) return true;
+    var stored = null;
+    try { stored = localStorage.getItem("ft_unlock_" + p.slug); } catch (e) {}
+    if (!stored) return false;
+    var found = false;
+    getLinks(p).forEach(function(slot){ if (slot.key === stored && linkAlive(slot)) found = true; });
+    return found;
+  }
+
+  function getRequests() {
+    try { return JSON.parse(localStorage.getItem("ft_requests") || "[]"); }
+    catch (e) { return []; }
+  }
+
+  var FEE_PCT = 5;
+  var PAYPAL_CLIENT_ID = ""; // Chris's PayPal app client ID goes here. It is a PUBLIC id (it prints on every PayPal checkout page) — the second it is filled in, the pay button becomes a REAL PayPal hold: PayPal itself holds the money until release.
+  var _ppLoading = false;
+  function guyName() {
+    try { var g = JSON.parse(localStorage.getItem("ft_guy") || "null"); if (g && g.name) return g.name; } catch (e) {}
+    return "A guy";
+  }
+  function recordHeld(slug, c, ppId) {
+    var pays = getPays();
+    pays.push({slug: slug, guy: guyName(), hrs: c.hrs, total: c.total, fee: c.fee, toHer: c.toHer, state: "HELD", when: Date.now(), pp: ppId || ""});
+    savePays(pays);
+    render();
+  }
+  function paypalHold(slug, price) {
+    var c = payCalc(slug, price);
+    var box = document.getElementById("pp-" + slug);
+    if (!box) { payNow(slug, price); return; }
+    function renderButtons() {
+      box.innerHTML = "";
+      paypal.Buttons({
+        createOrder: function(data, actions) {
+          return actions.order.create({ intent: "AUTHORIZE", purchase_units: [{ amount: { value: c.total.toFixed(2) }, description: "Partying Tulsa meetup hold" }] });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.authorize().then(function() {
+            recordHeld(slug, c, data.orderID);
+            setTimeout(function(){ alert("PayPal is now HOLDING your payment — it is NOT sent to her. After the meetup is checked, it releases to her minus the 5% house fee. No meetup, no release."); }, 200);
+          });
+        },
+        onError: function() { box.innerHTML = '<div class="meta">PayPal did not open. Try again, or pay the helper the usual way.</div>'; }
+      }).render(box);
+    }
+    if (window.paypal) { renderButtons(); return; }
+    if (_ppLoading) { box.innerHTML = '<div class="meta">PayPal is still loading — tap the pay button again in a few seconds.</div>'; return; }
+    _ppLoading = true;
+    box.innerHTML = '<div class="meta">Opening PayPal — it will HOLD $' + c.total.toFixed(2) + ', not send it…</div>';
+    var s = document.createElement("script");
+    s.src = "https://www.paypal.com/sdk/js?client-id=" + encodeURIComponent(PAYPAL_CLIENT_ID) + "&intent=authorize&currency=USD";
+    s.onload = function(){ _ppLoading = false; renderButtons(); };
+    s.onerror = function(){ _ppLoading = false; box.innerHTML = '<div class="meta">PayPal could not load. Check your connection, or pay the helper the usual way.</div>'; };
+    document.head.appendChild(s);
+  }
+  function getPays() {
+    try { return JSON.parse(localStorage.getItem("ft_pays") || "[]"); }
+    catch (e) { return []; }
+  }
+  function savePays(pays) {
+    try { localStorage.setItem("ft_pays", JSON.stringify(pays)); } catch (e) {}
+  }
+  function togglePay(slug) {
+    var d = document.getElementById("pay-" + slug);
+    if (d) d.style.display = (d.style.display === "block") ? "none" : "block";
+  }
+  function payCalc(slug, price) {
+    var hrs = parseInt((document.getElementById("hrs-" + slug) || {}).value, 10) || 1;
+    if (hrs < 1) hrs = 1; if (hrs > 12) hrs = 12;
+    var total = price * hrs;
+    var fee = Math.round(total * FEE_PCT) / 100;
+    var toHer = Math.round((total - fee) * 100) / 100;
+    var el = document.getElementById("calc-" + slug);
+    if (el) el.innerHTML = "You pay <b>$" + total.toFixed(2) + "</b> — held safe, not sent yet.<br>" +
+      "After the meetup is checked: <b>$" + toHer.toFixed(2) + "</b> goes to her, <b>$" + fee.toFixed(2) +
+      "</b> (" + FEE_PCT + "%) stays with the house.";
+    return {hrs: hrs, total: total, fee: fee, toHer: toHer};
+  }
+  function payNow(slug, price) {
+    if (PAYPAL_CLIENT_ID) { paypalHold(slug, price); return; }
+    var c = payCalc(slug, price);
+    recordHeld(slug, c, "");
+    setTimeout(function(){ alert("Payment held. Show up and have a good time — once the helper checks the meetup happened, her pay releases to her."); }, 200);
+  }
+  function releasePay(i) {
+    var pays = getPays();
+    if (pays[i]) { pays[i].state = "RELEASED"; pays[i].releasedAt = Date.now(); }
+    savePays(pays);
+    render();
+  }
+  function paysHTML(p) {
+    var pays = getPays();
+    var html = "";
+    pays.forEach(function(pay, i){
+      if (pay.slug !== p.slug) return;
+      if (isMine(p)) {
+        if (pay.state === "HELD") {
+          html += '<div class="meta" style="margin-top:8px">💰 ' + esc(pay.guy) + ' paid <b>$' + pay.total.toFixed(2) + '</b> for ' + pay.hrs + ' hr — HELD until the meetup is checked.' + (pay.pp ? ' Held inside PayPal itself.' : '') + ' ' +
+            '<button class="claimbtn" onclick="releasePay(' + i + ')">Meetup happened — release my pay</button></div>';
+        } else {
+          html += '<div class="meta" style="margin-top:8px">✅ Paid out: <b>$' + pay.toHer.toFixed(2) + '</b> to you, $' + pay.fee.toFixed(2) + ' house fee (' + FEE_PCT + '%).</div>';
+        }
+      } else if (pay.state === "HELD") {
+        html += '<div class="meta" style="margin-top:8px">💰 Your payment of <b>$' + pay.total.toFixed(2) + '</b> is HELD — it releases to her after the meetup is checked.</div>';
+      } else {
+        html += '<div class="meta" style="margin-top:8px">✅ Your payment was released to her after the meetup.</div>';
+      }
+    });
+    return html;
+  }
+
+  function requestAccess(slug) {
+    var reqs = getRequests();
+    var guy = "A guy";
+    try { var g = JSON.parse(localStorage.getItem("ft_guy") || "null"); if (g && g.name) guy = g.name; } catch (e) {}
+    reqs.push({slug: slug, guy: guy, when: Date.now()});
+    try { localStorage.setItem("ft_requests", JSON.stringify(reqs)); } catch (e) {}
+    alert("Request sent. If she accepts, she sends you her full link — and that link opens her whole profile right away.");
+    render();
+  }
+
+  function clearRequest(i) {
+    var reqs = getRequests();
+    reqs.splice(i, 1);
+    try { localStorage.setItem("ft_requests", JSON.stringify(reqs)); } catch (e) {}
+    render();
+  }
+
+  function cardHTML(p) {
+    if (isUnlocked(p)) {
+      var face = p.photo ? '<img src="' + p.photo + '" style="max-width:100%; max-height:150px; border-radius:10px">' : p.face;
+      var reqHtml = "";
+      var linksHtml = "";
+      if (isMine(p)) {
+        var links = getLinks(p);
+        linksHtml = '<div class="meta" style="margin-top:10px">🔗 <b>YOUR LINKS — settings</b></div>';
+        links.forEach(function(slot, idx){
+          linksHtml += '<div class="meta" style="margin-top:6px"><b>Link ' + (idx + 1) + '</b> — ' + linkLeft(slot) + '</div>' +
+            '<input readonly value="' + linkURL(p, idx) + '" style="width:100%; margin:4px 0">' +
+            '<button class="claimbtn" onclick="copyLinkIdx(\'' + p.slug + '\',' + idx + ')">Copy link ' + (idx + 1) + '</button> ' +
+            '<button class="claimbtn" onclick="setLinkTimer(\'' + p.slug + '\',' + idx + ',10)">10 min</button> ' +
+            '<button class="claimbtn" onclick="setLinkTimer(\'' + p.slug + '\',' + idx + ',30)">30 min</button> ' +
+            '<button class="claimbtn" onclick="setLinkTimer(\'' + p.slug + '\',' + idx + ',60)">1 hr</button> ' +
+            '<button class="claimbtn" onclick="setLinkTimer(\'' + p.slug + '\',' + idx + ',1440)">24 hrs</button> ' +
+            '<input id="lt-' + p.slug + '-' + idx + '" type="number" min="1" placeholder="Minutes" style="width:90px"> ' +
+            '<button class="claimbtn" onclick="setLinkTimer(\'' + p.slug + '\',' + idx + ',document.getElementById(\'lt-' + p.slug + '-' + idx + '\').value)">Set time</button> ' +
+            '<button class="claimbtn" onclick="renewLink(\'' + p.slug + '\',' + idx + ')">Make new link now</button>';
+        });
+        var reqs = getRequests();
+        var mine = [];
+        reqs.forEach(function(r, i){ if (r.slug === p.slug) mine.push({r: r, i: i}); });
+        if (mine.length) {
+          reqHtml = '<div class="meta" style="margin-top:8px">🔓 <b>Profile requests for you:</b></div>';
+          mine.forEach(function(m){
+            reqHtml += '<div class="meta">' + esc(m.r.guy) + ' asked for your full profile. ' +
+              '<button class="claimbtn" onclick="copyLink(\'' + p.slug + '\')">Accept — copy your full link to send him</button> ' +
+              '<button class="claimbtn" onclick="clearRequest(' + m.i + ')">Clear</button></div>';
+          });
+        }
+      }
+      return '<div class="pcard" id="card-' + (p.slug || '') + '"><div class="face">' + face + '</div><div class="body">' +
+        '<div class="name">' + p.name + ' <span class="badge">18+</span>' +
+        (p.pending ? ' <span class="badge pending">ID CHECK PENDING</span>' : '') + '</div>' +
+        '<div class="meta">📍 ' + p.area + '</div>' +
+        '<div class="price">$' + p.price + ' / hour</div>' +
+        '<div class="vibe">' + p.vibe + '</div>' +
+        '<div class="meta">🔗 Her link lives right here on her profile</div>' +
+        '<button class="claimbtn" onclick="copyLink(\'' + (p.slug || '') + '\')">Copy her link 🔗</button>' +
+        '<a class="helperbtn" href="' + HELPER + '" target="_blank">💬 Talk to the helper</a>' +
+        (isMine(p) ? "" :
+          '<button class="claimbtn" onclick="togglePay(\'' + (p.slug || '') + '\')">💳 Pay for a meetup</button>' +
+          '<div id="pay-' + (p.slug || '') + '" style="display:none; margin-top:8px">' +
+          '<div class="meta">Hours: <input id="hrs-' + (p.slug || '') + '" type="number" min="1" max="12" value="1" style="width:70px" onchange="payCalc(\'' + (p.slug || '') + '\',' + p.price + ')"></div>' +
+          '<div class="meta" id="calc-' + (p.slug || '') + '">You pay <b>$' + p.price.toFixed(2) + '</b> — held safe, not sent yet.<br>After the meetup is checked: <b>$' + (p.price - Math.round(p.price * FEE_PCT) / 100).toFixed(2) + '</b> goes to her, <b>$' + (Math.round(p.price * FEE_PCT) / 100).toFixed(2) + '</b> (' + FEE_PCT + '%) stays with the house.</div>' +
+          '<button class="claimbtn" onclick="payNow(\'' + (p.slug || '') + '\',' + p.price + ')">Pay with PayPal — hold my payment</button>' +
+          '<div id="pp-' + (p.slug || '') + '" style="margin-top:8px"></div>' +
+          '<div class="meta">How it works: your PayPal payment is HELD, not sent to her. After you meet up and the helper checks it happened, the house takes ' + FEE_PCT + '% and the rest releases to her. No meetup, no release.</div>' +
+          '</div>') +
+        paysHTML(p) +
+        linksHtml +
+        reqHtml +
+        '</div></div>';
+    }
+    var tface = p.photo2 ? '<img src="' + p.photo2 + '" style="max-width:100%; max-height:150px; border-radius:10px">' : p.face;
+    var intro = p.intro || (p.vibe ? p.vibe.slice(0, 90) : "");
+    var already = false;
+    getRequests().forEach(function(r){ if (r.slug === p.slug) already = true; });
+    return '<div class="pcard" id="card-' + (p.slug || '') + '"><div class="face">' + tface + '</div><div class="body">' +
+      '<div class="name">' + p.name + ' <span class="badge">18+</span> <span class="badge pending">PROFILE HIDDEN</span></div>' +
+      '<div class="meta">📍 ' + p.area + '</div>' +
+      '<div class="vibe">' + intro + '</div>' +
+      '<div class="meta">Her full profile — main photo, price, and booking — opens only with her link, or when she accepts your request.</div>' +
+      (already
+        ? '<div class="meta">✅ Request sent — if she accepts, she sends you her full link.</div>'
+        : '<button class="claimbtn" onclick="requestAccess(\'' + (p.slug || '') + '\')">Request full profile access 🔓</button>') +
+      '</div></div>';
+  }
+
+  function openSpotHTML(area) {
+    return '<div class="pcard"><div class="face">🐾</div><div class="body">' +
+      '<div class="name">Spot Open <span class="badge open">NO LADY YET</span></div>' +
+      '<div class="meta">📍 ' + area + '</div>' +
+      '<div class="price">She sets her price</div>' +
+      '<div class="vibe">This spot is empty. The first lady to claim it owns it.</div>' +
+      '<button class="claimbtn" onclick="document.getElementById(\'f_name\').scrollIntoView({behavior:\'smooth\'});document.getElementById(\'f_name\').focus();">Claim this spot — sign up 😈</button>' +
+      '</div></div>';
+  }
+
+  function render() {
+    refreshOwnLinks();
+    var profiles = getProfiles();
+    var h = (location.hash || "").replace("#", "");
+    var target = h;
+    profiles.forEach(function(p){
+      getLinks(p).forEach(function(slot){
+        if (h === p.slug + "-" + slot.key && linkAlive(slot)) {
+          try { localStorage.setItem("ft_unlock_" + p.slug, slot.key); } catch (e) {}
+          target = p.slug;
+        }
+      });
+      if (p.oldKeys && h.indexOf(p.slug + "-") === 0 && h !== p.slug && target === h) {
+        var k = h.slice(p.slug.length + 1);
+        if (p.oldKeys.indexOf(k) >= 0) {
+          target = p.slug;
+          setTimeout(function(){ alert("That link is no longer good — it expired or she made a new one. Her teaser is on this page, and you can request her full profile there."); }, 400);
+        }
+      }
+    });
+    var html = "";
+    profiles.forEach(function(p){ html += cardHTML(p); });
+    var spots = Math.max(0, 6 - profiles.length);
+    for (var i = 0; i < spots; i++) html += openSpotHTML(AREAS[i % AREAS.length]);
+    document.getElementById("grid").innerHTML = html;
+    if (target) {
+      var el = document.getElementById("card-" + target);
+      if (el) {
+        el.style.outline = "3px solid #ff4da6";
+        setTimeout(function(){ el.scrollIntoView({behavior:"smooth", block:"center"}); }, 300);
+      }
+    }
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function makeProfile() {
+    var name = esc(document.getElementById("f_name").value.trim());
+    var price = parseInt(document.getElementById("f_price").value, 10);
+    var vibe = esc(document.getElementById("f_vibe").value.trim());
+    var ok = document.getElementById("f_ok");
+    if (!name) { alert("Put the name you want on your profile."); return; }
+    if (!price || price < 10) { alert("Set your price per hour — $10 or more."); return; }
+    if (!document.getElementById("f_age").checked) { alert("You have to check the 18+ box to make a profile."); return; }
+    var slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "") + "-" + Math.floor(1000 + Math.random() * 9000);
+    var p = {
+      name: name,
+      face: document.getElementById("f_face").value,
+      area: document.getElementById("f_area").value,
+      price: price,
+      vibe: vibe || "Dinner, drinks, and a good time. Ask the helper.",
+      intro: esc(document.getElementById("f_intro").value.trim()),
+      slug: slug,
+      links: [{key: newKey(), mins: 0, madeAt: 0}, {key: newKey(), mins: 0, madeAt: 0}],
+      oldKeys: [],
+      pending: true
+    };
+    var fileInput = document.getElementById("f_photo");
+    var file = fileInput && fileInput.files && fileInput.files[0];
+    var fileInput2 = document.getElementById("f_photo2");
+    var file2 = fileInput2 && fileInput2.files && fileInput2.files[0];
+    function afterMain() {
+      if (file2) {
+        var reader2 = new FileReader();
+        reader2.onload = function() { p.photo2 = reader2.result; finishProfile(p, ok); };
+        reader2.readAsDataURL(file2);
+      } else {
+        finishProfile(p, ok);
+      }
+    }
+    if (file) {
+      var reader = new FileReader();
+      reader.onload = function() { p.photo = reader.result; afterMain(); };
+      reader.readAsDataURL(file);
+    } else {
+      afterMain();
+    }
+  }
+
+  function finishProfile(p, ok) {
+    var profiles = getProfiles();
+    profiles.push(p);
+    localStorage.setItem("ft_profiles", JSON.stringify(profiles));
+    var mine = getMine();
+    mine.push(p.slug);
+    try { localStorage.setItem("ft_mine", JSON.stringify(mine)); } catch (e) {}
+    render();
+    var url = fullLink(p);
+    ok.style.display = "block";
+    ok.innerHTML = "😈 Your profile is up as <b>pending</b>.<br><br><b>THESE ARE YOUR TWO LINKS — each one opens your FULL profile:</b>" +
+      '<input readonly value="' + url + '" style="width:100%; margin:8px 0">' +
+      '<input readonly value="' + linkURL(p, 1) + '" style="width:100%; margin:8px 0">' +
+      "Give them to guys you pick — post them, text them, drop them in your bios. Anyone who opens one sees your whole profile right away.<br><br>" +
+      "<b>Link settings:</b> on your profile card up top you can put a timer on each link — 10 minutes, 30 minutes, 1 hour, 24 hours, or any minutes you type. When the time runs out, that link dies and a fresh new one is made for you, right on your card.<br><br>" +
+      "<b>Everyone else sees only your teaser</b> — your second photo and your small introduction — with a <b>Request full profile access</b> button. When a guy requests, his name shows on your profile. Accept by copying your full link and sending it to him.<br><br>" +
+      "Photos and video: you added photos if you picked them — and after your ID check, send the helper your best photos and a short video, and they go right on your link.<br><br>" +
+      "One rule you only see because you signed up: sex is <b>not</b> promoted here and it is <b>never</b> required — not by any guy, not by anyone. The money is for your time and company. You can always say no, to anything, at any time.<br><br>" +
+      "Last step: tap any <b>Talk to the helper</b> button and say \"ID check\" — once the helper sees your ID, your profile goes fully live and guys can book you.";
+    document.getElementById("grid").scrollIntoView({behavior:"smooth"});
+  }
+
+  function makeGuy() {
+    var name = esc(document.getElementById("g_name").value.trim());
+    var contact = esc(document.getElementById("g_contact").value.trim());
+    var ok = document.getElementById("g_ok");
+    localStorage.setItem("ft_guy", JSON.stringify({name:name, contact:contact}));
+    ok.style.display = "block";
+    ok.innerHTML = "🐾 Saved" + (name ? ", " + name : "") + ". The helper knows you now. Pick a lady and tap her helper button whenever you're ready.";
+  }
+
+  render();
+  introPwHint();
+</script>
+</body>
+</html>
