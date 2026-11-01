@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Phone Log — Dashboard</title>
+<style>
+ body{background:#0b0d12;color:#f4f6f8;font-family:Verdana,system-ui,sans-serif;margin:0;padding:20px;line-height:1.45}
+ main{max-width:980px;margin:0 auto}
+ h1{font-size:32px;margin:0 0 4px;color:#ffffff}
+ h2{font-size:22px;margin:28px 0 8px;color:#a9d7ff}
+ .sub,.muted{color:#aeb6c2}
+ .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:18px}
+ .card{background:#171a21;border:1px solid #313743;border-radius:14px;padding:16px}
+ .card .n{font-size:34px;font-weight:bold;color:#ffffff}
+ .card .l{color:#c3cad4;font-size:14px;margin-top:3px}
+ .notice{background:#16251b;border:1px solid #2f6b42;border-radius:12px;padding:14px;margin-top:18px}
+ .privacy{background:#211b12;border:1px solid #77591f;border-radius:12px;padding:14px;margin-top:22px}
+ table{width:100%;border-collapse:collapse;background:#12151b;border-radius:12px;overflow:hidden}
+ th,td{padding:10px;border-bottom:1px solid #2b303b;text-align:left;vertical-align:top}
+ th{color:#a9d7ff;background:#181c24}
+ .empty{color:#aeb6c2}
+ code{color:#b8f1c8}
+ .party-section{background:#180d16;border:2px solid #8e3560;border-radius:16px;padding:20px;margin-top:34px}
+ .party-section h2{color:#ff8fc0;margin-top:0}
+ .party-intro{color:#eadbe8}
+ .party-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:16px}
+ .party-card{background:#24101e;border:1px solid #65304d;border-radius:14px;padding:16px}
+ .party-card .n{font-size:30px;font-weight:bold;color:#ffffff}
+ .party-card .l{color:#e2c7da;font-size:14px;margin-top:3px}
+ .party-empty{background:#24101e;border:1px solid #65304d;border-radius:12px;padding:14px}
+ .party-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+ .party-links a{color:#ffb3d1;background:#2b1323;border:1px solid #8e3560;border-radius:999px;padding:9px 13px;text-decoration:none}
+</style></head><body><main>
+<h1>📱 My Phone Log</h1>
+<div class="sub">Your visible phone activity dashboard. Last built: Sunday, November 01, 2026 at 01:40 AM.</div>
+<div class='notice'><strong>No events yet.</strong> This empty page is ready. It will fill in after My Phone Log is installed, a pairing word is set on the phone, logging is turned on, and collector.py is run with that same word.</div>
+<div class="grid">
+ <div class="card"><div class="n">0</div><div class="l">Total saved events</div></div>
+ <div class="card"><div class="n">0</div><div class="l">Screen turned on</div></div>
+ <div class="card"><div class="n">0</div><div class="l">Phone unlocks</div></div>
+ <div class="card"><div class="n">0</div><div class="l">App opens saved today</div></div>
+</div>
+<p><strong>Last event:</strong> No events yet</p>
+
+<h2>Apps opened today</h2>
+<table><tr><th>App</th><th>Times</th></tr>
+<tr><td colspan='2' class='empty'>No app-open events for today yet. This part only fills in after Usage Access is turned on in Android Settings.</td></tr></table>
+
+<h2>Battery history</h2>
+<table><tr><th>When</th><th>Battery</th><th>Charging</th></tr>
+<tr><td colspan='3' class='empty'>No battery events saved yet.</td></tr></table>
+
+<h2>Latest events</h2>
+<table><tr><th>When</th><th>What happened</th></tr>
+<tr><td colspan='2' class='empty'>No events yet. Install and turn on My Phone Log, then run the collector with the same pairing word.</td></tr></table>
+
+<div class="privacy">
+<strong>Visible only — and clear about its limits.</strong><br>
+My Phone Log shows its real name and icon, asks the owner to turn it on, and keeps
+a notice on screen the whole time logging is on. It records basic phone events only.
+It never records typing or passwords, message or notification contents, other apps'
+screens or private data, screenshots, microphone or camera input, calls, or location.
+Foreground app names appear only when the owner personally grants Android's Usage
+Access permission in Settings.
+</div>
+
+
+<section class="party-section" aria-labelledby="party-heading">
+  <h2 id="party-heading">😈 Partying Tulsa — Business</h2>
+  <p class="party-intro">This is a separate business section. These counts come
+  from Partying Tulsa's own saved records — they are not phone activity and are
+  not part of My Phone Log.</p>
+  <p class='muted'>Business data last built: 2026-10-31T19:22:53.</p>
+  <div class="party-grid"><div class='party-card'><div class='n'>0</div><div class='l'>Ladies signed up</div></div><div class='party-card'><div class='n'>0</div><div class='l'>Meetups total</div></div><div class='party-card'><div class='n'>0</div><div class='l'>Meetups paid and held</div></div><div class='party-card'><div class='n'>$0.00</div><div class='l'>Money held right now</div></div><div class='party-card'><div class='n'>$0.00</div><div class='l'>Released to ladies</div></div><div class='party-card'><div class='n'>$0.00</div><div class='l'>House fees earned</div></div><div class='party-card'><div class='n'>0</div><div class='l'>Private-message users</div></div><div class='party-card'><div class='n'>0</div><div class='l'>Private messages saved (count only)</div></div><div class='party-card'><div class='n'>Running</div><div class='l'>Partying Tulsa bot</div></div><div class='party-card'><div class='n'>Live</div><div class='l'>Partying Tulsa web page</div></div><div class='party-card'><div class='n'>Live</div><div class='l'>Tulsa Weather web page</div></div></div>
+  <p class="muted">Private-message figures are counts only. This section does
+  not show what anyone wrote.</p>
+  
+<div class="party-links">
+  <a href="https://t.me/Partyingtulsabot">Open @Partyingtulsabot on Telegram</a>
+  <a href="https://projecthop.github.io/cyber-red-localhost-terminal/females/females.html">Open the Partying Tulsa page</a>
+</div>
+</section>
+
+<p class="sub">To refresh this page: run <code>collector.py</code> with the same pairing
+word used in the phone app, then run <code>build_dashboard.py</code> again.</p>
+</main></body></html>
